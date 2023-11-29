@@ -4,7 +4,7 @@
         <div class="quixnav">
             <div class="quixnav-scroll">
                 <ul class="metismenu" id="menu">
-                    <li class="nav-label first">Main Menu</li>
+                    <li class="nav-label first text-light">Super Admin</li>
                     <li><a  href="../view/dashboard.php" aria-expanded="false">
                     <i class="fa-solid fa-gauge"></i><span class="nav-text">Dashboard</span></a>
                         <!-- <ul aria-expanded="false">
@@ -20,19 +20,19 @@
                         </ul> -->
                     </li>   
                     <li><a  href="../view/admin.php" aria-expanded="false">
-                    <i class="fa-solid fa-user-pen"></i><span class="nav-text">Admin</span></a>
+                    <i class="fa-solid fa-user-pen"></i><span class="nav-text">Admins</span></a>
                         <!-- <ul aria-expanded="false">
                             <li><a href="../.././index.html">Dashboard 1</a></li>
                             <li><a href="../.././index2.html">Dashboard 2</a></li>
                         </ul> -->
                     </li>  <li><a href="../view/hospital.php" aria-expanded="false">
-                        <i class="fa-solid fa-hospital"></i></i><span class="nav-text">Hospital</span></a>
+                        <i class="fa-solid fa-hospital"></i></i><span class="nav-text">Hospitals</span></a>
                         <!-- <ul aria-expanded="false">
                             <li><a href="../.././index.html">Dashboard 1</a></li>
                             <li><a href="../.././index2.html">Dashboard 2</a></li>
                         </ul> -->
                     </li>   <li><a  href="../view/patient.php" aria-expanded="false">
-                    <i class="fa-solid fa-suitcase-medical"></i><span class="nav-text">Patient</span></a>
+                    <i class="fa-solid fa-suitcase-medical"></i><span class="nav-text">Patients</span></a>
                         <!-- <ul aria-expanded="false">
                             <li><a href="../.././index.html">Dashboard 1</a></li>
                             <li><a href="../.././index2.html">Dashboard 2</a></li>
