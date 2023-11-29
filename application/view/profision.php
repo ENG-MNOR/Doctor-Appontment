@@ -84,7 +84,7 @@ include '../include/sidebar.php';
                     </div>
                     <div class="mb-3">
                         <!-- <label for="message-text" class="col-form-label">Message:</label> -->
-                        <input type="text" class="form-control decription" id="recipient-name">
+                        <input type="text" class="form-control description" id="recipient-name">
                     </div>
                     <div class="mb-3">
                         <!-- <label for="message-text" class="col-form-label">Message:</label> -->
@@ -118,132 +118,134 @@ include '../include/footer.php';
     integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
     crossorigin="anonymous"></script>
 <script src='../js/jquery-3.3.1.min.js'></script>
+<script src="../js/proffision.js"></script>
 <script>
-    $(document).ready(() => {
-        $(".add").click(() => $(".proffisionModal").modal("show"));
+    
+        // .(".add").click(()=>{$(".proffisionModal").modal("show");});
+//         $(".add").click(() => $(".proffisionModal").modal("show"));
+//         $(".save").click(() => {
+//             if ($(".save").text() == "save") {
+//                 var data = {
+//                     name: $(".name").val(),
+//                     decription: $(".decription").val(),
+//                     action: "createProffision"
+//                 }
 
-        $(".save").click(() => {
-            if ($(".save").text() == "save") {
-                var data = {
-                    name: $(".name").val(),
-                    decription: $(".decription").val(),
-                    action: "createProffision"
-                }
-
-                $.ajax({
-                    method: "POST",
-                    dataType: "JSON",
-                    url: "../Api/proffision.api.php",
-                    data: data,
-                    success: (res) => {
-                        console.log(res)
-                    },
-                    error: (res) => {
-                        console.log(res)
-                    }
-                })
+//                 $.ajax({
+//                     method: "POST",
+//                     dataType: "JSON",
+//                     url: "../Api/proffision.api.php",
+//                     data: data,
+//                     success: (res) => {
+//                         console.log(res)
+//                     },
+//                     error: (res) => {
+//                         console.log(res)
+//                     }
+//                 })
            
-    }else {
-        var data = {
-            name: $(".name").val(),
-            decription: $(".decription").val(),
+//     }else {
+//         var data = {
+//             name: $(".name").val(),
+//             decription: $(".decription").val(),
 
-            id: $(".id").val(),
-            action: "updateProffision",
+//             id: $(".id").val(),
+//             action: "updateProffision",
 
-        }
-            console.log(data);
+//         }
+//             console.log(data);
 
-        $.ajax({
-            method: "POST",
-            dataType: "JSON",
-            url: "../Api/proffision.api.php",
-            data: data,
-            success: (res) => {
-                console.log(res)
-            },
-            error: (res) => {
-                console.log(res)
-            }
-        })
-    }
-})
-
-
+//         $.ajax({
+//             method: "POST",
+//             dataType: "JSON",
+//             url: "../Api/proffision.api.php",
+//             data: data,
+//             success: (res) => {
+//                 console.log(res)
+//             },
+//             error: (res) => {
+//                 console.log(res)
+//             }
+//         })
+//     }
+// })
 
 
 
-    const readProffision = () => {
-        $.ajax({
-            method: "POST",
-            dataType: "JSON",
-            data: { "action": "readProffision" },
-            url: "../Api/proffision.api.php",
-            success: (res) => {
-                var tr = "<tr>"
-                var { data } = res;
-                data.forEach(value => {
-                    tr += `<td>${value.pro_id}</td>`
-                    tr += `<td>${value.name}</td>`
-                    tr += `<td>${value.description}</td>`
-                    tr += `<td><a class='btn btn-success editButton' editID=${value.pro_id}>Edit</a>
-                      <a class='btn btn-danger deleteProffision' delID=${value.pro_id}>Delete</a></td>`
-                    tr += '</tr>'
-                })
-                $(".table tbody").html(tr)
-                console.log(data)
-            },
-            error: (err) => {
-                console.log(err)
-            }
-
-        })
-    }
-    readProffision()
-    const fetchProffisionData = (id) => {
-        $.ajax({
-            method: "POST",
-            dataType: "JSON",
-            data: { "action": "fetchingOne", id: id },
-            url: "../Api/proffision.api.php",
-            success: (res) => {
-                console.log(res)
-                $('.name').val(res.data[0].name)
-                $('.decription').val(res.data[0].description)
-                $('.id').val(res.data[0].pro_id)
-                $('.save').text("Edit")
-                $(".proffisionModal").modal("show")
-            },
-            error: (res) => {
-                console.log(res)
-            },
-        })
-    }
 
 
+//     const readProffision = () => {
+//         $.ajax({
+//             method: "POST",
+//             dataType: "JSON",
+//             data: { "action": "readProffision" },
+//             url: "../Api/proffision.api.php",
+//             success: (res) => {
+//                 var tr = "<tr>"
+//                 var { data } = res;
+//                 data.forEach(value => {
+//                     tr += `<td>${value.pro_id}</td>`
+//                     tr += `<td>${value.name}</td>`
+//                     tr += `<td>${value.description}</td>`
+//                     tr += `<td><a class='btn btn-success editButton' editID=${value.pro_id}>Edit</a>
+//                       <a class='btn btn-danger deleteProffision' delID=${value.pro_id}>Delete</a></td>`
+//                     tr += '</tr>'
+//                 })
+//                 $(".table tbody").html(tr)
+//                 console.log(data)
+//             },
+//             error: (err) => {
+//                 console.log(err)
+//             }
 
-    $(document).on("click", "a.editButton", function () {
-        var id = $(this).attr('editID')
-        fetchProffisionData(id)
+//         })
+//     }
+//     readProffision()
+//     const fetchProffisionData = (id) => {
+//         $.ajax({
+//             method: "POST",
+//             dataType: "JSON",
+//             data: { "action": "fetchingOne", id: id },
+//             url: "../Api/proffision.api.php",
+//             success: (res) => {
+//                 console.log(res)
+//                 $('.name').val(res.data[0].name)
+//                 $('.decription').val(res.data[0].description)
+//                 $('.id').val(res.data[0].pro_id)
+//                 $('.save').text("Edit")
+//                 $(".proffisionModal").modal("show")
+//             },
+//             error: (res) => {
+//                 console.log(res)
+//             },
+//         })
+//     }
 
-    })
-    $(document).on("click", "a.deleteProffision", function () {
-        var id = $(this).attr('delID')
-        $.ajax({
-            method: "POST",
-            data: {
-                "id": id,
-                "action": "deleteProffision"
-            },
-            url: "../Api/proffision.api.php",
-            success: (res) => {
-                console.log(res)
-            },
-            error: (res) => {
-                console.log(res)
-            }
 
-        })
-    })
-    })
+
+//     $(document).on("click", "a.editButton", function () {
+//         var id = $(this).attr('editID')
+//         fetchProffisionData(id)
+
+//     })
+//     $(document).on("click", "a.deleteProffision", function () {
+//         var id = $(this).attr('delID')
+//         $.ajax({
+//             method: "POST",
+//             data: {
+//                 "id": id,
+//                 "action": "deleteProffision"
+//             },
+//             url: "../Api/proffision.api.php",
+//             success: (res) => {
+//                 console.log(res)
+//             },
+//             error: (res) => {
+//                 console.log(res)
+//             }
+
+//         })
+//     })
+    // })
+    
 </script>

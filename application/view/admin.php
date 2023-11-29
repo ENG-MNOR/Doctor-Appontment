@@ -69,7 +69,8 @@ include '../include/sidebar.php';
     data-bs-whatever="@mdo">Open modal for @mdo</button>
 
 
-<div class="modal fade adminModal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade adminModal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -80,15 +81,15 @@ include '../include/sidebar.php';
                 <form>
                     <div class="mb-3">
                         <!-- <label for="recipient-name" class="col-form-label">Username:</label> -->
-                        <input type="text" class="form-control username" id="recipient-name">
+                        <input type="text" class="form-control username" placeholder="UserName" id="recipient-name">
                     </div>
                     <div class="mb-3">
                         <!-- <label for="message-text" class="col-form-label">Message:</label> -->
-                        <input type="text" class="form-control email" id="recipient-name">
+                        <input type="text" class="form-control email" placeholder="Email" id="recipient-name">
                     </div>
                     <div class="mb-3">
                         <!-- <label for="message-text" class="col-form-label">Message:</label> -->
-                        <input type="text" class="form-control password" id="recipient-name">
+                        <input type="text" class="form-control password" placeholder="Password" id="recipient-name">
                         <input type="text" hidden class="form-control id" id="recipient-name">
                     </div>
                 </form>
@@ -105,8 +106,12 @@ include '../include/sidebar.php';
 include '../include/footer.php';
 ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
 <script src='../js/jquery-3.3.1.min.js'></script>
 
 <script>
@@ -114,18 +119,18 @@ include '../include/footer.php';
     // pretier
     // php formatter
     // 
-
     $(document).ready(() => {
+        //this where we want to create  or insert the admin
         $(".add").click(() => $(".adminModal").modal("show"));
-        if($(".save").text()=="save"){
-            $(".save").click(() => {
+        $(".save").click(() => {
+            if ($(".save").text() == "Save") {
+                alert("create admin clicked");
             var data ={
                 username : $(".username").val(),
                 email : $(".email").val(),
                 password : $(".password").val(),
                 action: "createAdmin"
             }
-
             $.ajax({
                 method: "POST",
                 dataType: "JSON",
@@ -133,38 +138,78 @@ include '../include/footer.php';
                 data:data,
                 success : (res)=>{
                     console.log(res)
+                    readAdmin();
                 },
                 error: (res)=>{
                     console.log(res)
                 }
             })
-        })
-        }else{
-            $(".save").click(() => {
-            var data ={
-                username : $(".username").val(),
-                email : $(".email").val(),
-                password : $(".password").val(),
-                id : $(".id").val(),
-                action: "updateAdmin",
+            }
+            // this where  we update the admin
+            else {
+                $(".save").click(() => {
+                    alert("update admin clicked");
+                    var data = {
+                        username: $(".username").val(),
+                        email: $(".email").val(),
+                        password: $(".password").val(),
+                        id: $(".id").val(),
+                        action: "updateAdmin",
 
+                    }
+
+                    $.ajax({
+                        method: "POST",
+                        dataType: "JSON",
+                        url: "../Api/admins.api.php",
+                        data: data,
+                        success: (res) => {
+                            console.log(res)
+                        },
+                        error: (res) => {
+                            console.log(res)
+                        }
+                    })
+                })
             }
 
+        })
+
+        //this is where we listen the update button and call the function of fetching data
+        $(document).on("click", "a.editButton", function () {
+            var id = $(this).attr('editID');
+            
+            fetchAdminData(id)
+
+        })
+
+        //this listens the clicking of the delete button and deletes the selected admin
+        $(document).on("click", "a.deleteAdmin", function () {
+            var id = $(this).attr('delID')
+            
             $.ajax({
                 method: "POST",
-                dataType: "JSON",
-                url: "../Api/admins.api.php",
-                data:data,
-                success : (res)=>{
-                    console.log(res)
+                data: {
+                    "id": id,
+                    "action": "deleteAdmin"
                 },
-                error: (res)=>{
+                url: "../Api/admins.api.php",
+                success: (res) => {
+                    console.log(res);
+                    readAdmin();
+                },
+                error: (res) => {
                     console.log(res)
                 }
+
             })
         })
-        }
-        
+
+
+
+
+        // this the part of the function
+        // this is the fuction that reads the admin data
         const readAdmin = () => {
             $.ajax({
                 method: "POST",
@@ -195,20 +240,21 @@ include '../include/footer.php';
         readAdmin();
 
 
+        // this function fetches asingle admin information
         const fetchAdminData = (id) => {
             $.ajax({
                 method: "POST",
                 dataType: "JSON",
-                data: { "action": "fetchingOne",id:id },
+                data: { "action": "fetchingOne", id: id },
                 url: "../Api/admins.api.php",
                 success: (res) => {
                     console.log(res)
-                  $('.username').val(res.data[0].username)
-                  $('.email').val(res.data[0].email)
-                  $('.password').val(res.data[0].password)
-                  $('.id').val(res.data[0].admin_id)
-                  $('.save').text("Edit")
-                  $(".adminModal").modal("show")
+                    $('.username').val(res.data[0].username)
+                    $('.email').val(res.data[0].email)
+                    $('.password').val(res.data[0].password)
+                    $('.id').val(res.data[0].admin_id)
+                    $('.save').text("Edit")
+                    $(".adminModal").modal("show")
                 },
                 error: (res) => {
                     console.log(res)
@@ -216,30 +262,7 @@ include '../include/footer.php';
             })
         }
 
-        $(document).on("click", "a.deleteAdmin", function () {
-            var id = $(this).attr('delID')
-            $.ajax({
-                method: "POST",
-                data: {
-                    "id": id,
-                    "action": "deleteAdmin"
-                },
-                url: "../Api/admins.api.php",
-                success: (res) => {
-                    console.log(res)
-                },
-                error: (res) => {
-                    console.log(res)
-                }
 
-            })
-        })
-
-        $(document).on("click", "a.editButton", function () {
-            var id = $(this).attr('editID')
-            fetchAdminData(id)
-           
-        })
 
 
     })

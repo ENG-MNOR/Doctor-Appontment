@@ -150,15 +150,13 @@ switch ($_POST['action']) {
     case "createAdmin":
         $admin->createAdmin(Admin::getConnection());
         break;
-    case "readProffision":
+    case "readAdmins":
         $admin->readAdmins(Admin::getConnection());
         break;
-    // case "readProffision":
-    //     $admin->readProffision(Admin::getConnection());
-    //     break;
-        // case "deleteProffision":
-        //     $admin->deleteProffision(Admin::getConnection());
-        //     break;
+        case "fetchingOne":
+            $admin->fetchingOne(Admin::getConnection());
+            break;
+    
     case "updateAdmin":
         $admin->updateAdmin(Admin::getConnection());
         break;

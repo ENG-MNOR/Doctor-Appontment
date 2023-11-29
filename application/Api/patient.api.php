@@ -67,7 +67,7 @@ class Patient extends DatabaseConnection
             echo json_encode($response);
         }
 
-    public function updateDoctor($conn)
+    public function updatePatient($conn)
         {
         extract($_POST);
         $response=array();
@@ -87,6 +87,49 @@ class Patient extends DatabaseConnection
         echo json_encode($response);
         }
 
+    public function fetchingOne($conn){
+            extract($_POST);
+            $res= array();
+            $data = array();
+            $sql = "SELECT *from patients where 
+            pat_id='$id'";
+            if(!$conn)
+              $res=array("error"=> "there is an error");
+            else{
+                $result = $conn->query($sql);
+                if($result){
+                    while($rows=$result->fetch_assoc())
+                    {
+                        $data[]=$rows;
+                    }
+                    $res= array("message"=>"success","data"=>$data);
+                }else{
+                    $res= array("error"=>"there is an error");
+                }
+            }
+            echo json_encode($res);
+        }
+    public function updatePatien($conn)
+        {
+         extract($_POST);
+         $response=array();
+         $sql="UPDATE `patients` SET `name`='$name',`gender`='$gender',`mobile`='$mobile',`address`='$address',`email`='$email',`password`='$password',`profile_image`='$image'  where hospital_id='$id'";
+         if(!$conn)
+         {
+           $response=array("error"=>"there is an error connction","status"=>false);
+         }
+         else
+          {
+            $result=$conn->query($sql);
+            if($result){
+                $response=array("message"=>"Doctor successfully updated","status"=>true);
+            }
+            else{
+                $response=array("error"=>"there is an error connection","status"=>false);
+            }
+         }
+         echo json_encode($response);
+        }
 
     }
 

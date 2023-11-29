@@ -50,37 +50,55 @@ class Proffision extends DatabaseConnection
         echo json_encode($res);
     }
   
-    public  function createProffision($_conn)
-    {
-        extract($_POST);
-        $response = array();
+//     public  function createProffision($_conn)
+//     {
+//         extract($_POST);
+//         $response = array();
 
-        $sql = "INSERT into proffision(`name`,`description`) VALUES ('$name','$decription')";
-        if (!$_conn)
-            $response = array("error" => "There is an error connection ", "status" => false);
-        else {
-            try {
-                echo "hi";
-                $result = $_conn->query($sql);
-                if ($result)
-                    $response = array("message" => "profision was created..", "status" => true);
-                else
-                    $response = array("error" => "There is an error connection ", "status" => false);
-                    echo "hi2";
-                } catch (Exception $e) {
-                    echo "h3";
-                $response = array(
-                    "error" => "There is an error occured while executing..",
-                    "message" => $e->getMessage(),
-                    "status" => false
-                );
-            }
+//         $sql = "INSERT into proffision(`name`,`description`) VALUE ('$name','$description')";
+//         if (!$_conn)
+//             $response = array("error" => "There is an error connection ", "status" => false);
+//         else {
+//             try {
+                
+//                 $result = $_conn->query($sql);
+//                 if ($result)
+//                     $response = array("message" => "profision was created..", "status" => true);
+//                 else
+//                     $response = array("error" => "There is an error connection ", "status" => false);
+                    
+//                 } catch (Exception $e) {
+                    
+//                 $response = array(
+//                     "error" => "There is an error occured while executing..",
+//                     "message" => $e->getMessage(),
+//                     "status" => false
+//                 );
+//             }
+//         }
+// $response[]=array("er"=> "true");
+//         echo  json_encode($response);
+//     }
+public function createProffision($conn)
+{
+    extract($_POST);
+    $response=array();
+    $sql = "INSERT INTO `proffision`(`name`, `description`) VALUES ('$name','$description')";    
+    if(!$conn){
+        $response=array("error"=>"there is an error connection","status"=>false);
+    }
+    else{
+        $result=$conn->query($sql);
+        if($result){
+            $response=array("message"=>"proffision successfully created...","status"=>true);
         }
-$response[]=array("er"=> "true");
-        echo  json_encode($response);
+        else{
+            $response=array("error"=>" error connection","Status"=>false);
+        }
     }
 
- 
+    echo json_encode($response);
+}
     public  function deleteProffision($_conn)
     {
         extract($_POST);
@@ -112,7 +130,7 @@ $response[]=array("er"=> "true");
         extract($_POST);
         $response = array();
 
-        $sql = "UPDATE proffision set `name` =' $name', `description` = '$decription' WHERE `pro_id` = '$id'";
+        $sql = "UPDATE proffision set `name` =' $name', `description` = '$description' WHERE `pro_id` = '$id'";
         if(!$conn){
         $response = array("error"=>"There is an error in the connetction", "status"=>false);
         }

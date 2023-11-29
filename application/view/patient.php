@@ -52,7 +52,7 @@ include '../include/sidebar.php';
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
+                                                    <tbody></tbody>
 
                                                     
                                                    
@@ -67,6 +67,58 @@ include '../include/sidebar.php';
         <!--**********************************
             Content body end
         ***********************************-->
+        <div class="modal fade patientModal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="patientForm">
+                    <div class="mb-3">
+                        <!-- <label for="recipient-name" class="col-form-label">Username:</label> -->
+                        <input type="text" class="form-control name" id="recipient-name">
+                    </div>
+                    <div class="mb-3">
+                        <!-- <label for="message-text" class="col-form-label">Message:</label> -->
+                        <input type="text" class="form-control gender" id="recipient-name">
+                    </div>
+                    <div class="mb-3">
+                        <!-- <label for="message-text" class="col-form-label">Message:</label> -->
+
+                        <input type="text" class="form-control email" id="recipient-name">
+                    </div>
+                    <div class="mb-3">
+                        <!-- <label for="message-text" class="col-form-label">Message:</label> -->
+
+                        <input type="text" class="form-control address" id="recipient-name">
+                    </div>
+                    <div class="mb-3">
+                        <!-- <label for="message-text" class="col-form-label">Message:</label> -->
+
+                        <input type="text" class="form-control mobile" id="recipient-name">
+                    </div>
+                    <div class="mb-3">
+                        <!-- <label for="message-text" class="col-form-label">Message:</label> -->
+
+                        <input type="text" class="form-control password" id="recipient-name">
+                    </div>                    <div class="mb-3">
+                        <!-- <label for="message-text" class="col-form-label">Message:</label> -->
+
+                        <input type="text" class="form-control image" id="recipient-name">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary save">save</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -79,6 +131,32 @@ include '../include/footer.php';
 
 <script>
  $(document).ready(()=>{
+    
+  
+    const fetchPatientData = (id) => {
+            $.ajax({
+                method: "POST",
+                dataType: "JSON",
+                data: { "action": "fetchingOne", id: id },
+                url: "../Api/patient.api.php",
+                success: (res) => {
+                    console.log(res)
+                    $('.name').val(res.data[0].name)
+                    $('.email').val(res.data[0].email)
+                    $('.gender').val(res.data[0].gender)
+                    $('.id').val(res.data[0].pat_id)
+                    $('.mobile').val(res.data[0].mobile)
+                    $('.address').val(res.data[0].address)
+                    $('.image').val(res.data[0].profile_image)
+                    $('.save').text("Edit")
+                    $(".patientModal").modal("show")
+                },
+                error: (res) => {
+                    console.log(res)
+                },
+            })
+        }
+
 const readPatient=()=>{
     $.ajax({
         method:"POST",
@@ -97,7 +175,7 @@ const readPatient=()=>{
          tr+=`<td>${values.email}</td>`;
          tr+=`<td>${values.password}</td>`;
          tr+=`<td>${values.profile_image}</td>`;
-         tr+=`<td><a class="btn btn-success">Edit</a>
+         tr+=`<td><a class="btn btn-success editPatient" editID=${values.pat_id}>Edit</a>
          <a class="btn btn-danger deletePatient " delId=${values.pat_id}>Delete</a></td>`;
          tr+="</tr>";
         })
@@ -128,7 +206,14 @@ $(document).on("click", "a.deletePatient", function(){
     })
 })
 
- readPatient();
+$(document).on('click',"a.editPatient",function(){
+    id=$(this).attr("editID");
+    fetchPatientData(id);
+    
+
+});
+
+readPatient();
  })
 
 
