@@ -60,15 +60,15 @@ class Proffision extends DatabaseConnection
             $response = array("error" => "There is an error connection ", "status" => false);
         else {
             try {
-                echo "hi";
+                
                 $result = $_conn->query($sql);
                 if ($result)
                     $response = array("message" => "profision was created..", "status" => true);
                 else
                     $response = array("error" => "There is an error connection ", "status" => false);
-                    echo "hi2";
+                    
                 } catch (Exception $e) {
-                    echo "h3";
+                   
                 $response = array(
                     "error" => "There is an error occured while executing..",
                     "message" => $e->getMessage(),
@@ -76,7 +76,6 @@ class Proffision extends DatabaseConnection
                 );
             }
         }
-$response[]=array("er"=> "true");
         echo  json_encode($response);
     }
 
