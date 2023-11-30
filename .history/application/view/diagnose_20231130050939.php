@@ -220,8 +220,8 @@ include '../include/footer.php';
             success: (res) => {
                 console.log(res)
                 $('.name').val(res.data[0].name)
-                $('.description').val(res.data[0].description)
-                $('.id').val(res.data[0].diganose_id)
+                $('.decription').val(res.data[0].description)
+                $('.id').val(res.data[0].pro_id)
                 $('.save').text("Edit")
                 $(".diagnoseModal").modal("show")
             },
