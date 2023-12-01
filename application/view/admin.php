@@ -194,9 +194,6 @@ include '../include/footer.php';
 
         })
 
-        // } else {
-
-        // }
 
         const readAdmin = () => {
             $.ajax({
