@@ -50,7 +50,6 @@ include '../include/sidebar.php';
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody></tbody>
                                                    
                                                 </table>
                                             </div>
@@ -142,7 +141,6 @@ include '../include/footer.php';
                     data: data,
                     success: (res) => {
                         console.log(res)
-                        readDiagnose()
                     },
                     error: (res) => {
                         console.log(res)
@@ -192,13 +190,13 @@ include '../include/footer.php';
                     tr += `<td>${value.diganose_id}</td>`
                     tr += `<td>${value.name}</td>`
                     tr += `<td>${value.description}</td>`
-                    tr += `<td><a class='btn btn-success editButton' editID=${value.diganose_id}}>Edit</a>
+                    tr += `<td><a class='btn btn-success editButton' editID=${value.diganose_id}>Edit</a>
                       <a class='btn btn-danger deleteDiagnose' delID=${value.diganose_id}>Delete</a></td>`
                     tr += '</tr>'
 
                     console.log(value)
                 })
-                $(".table tbody").html(tr)
+                $(".table tbody").append(tr)
                 console.log(tr)
 
 
@@ -220,8 +218,8 @@ include '../include/footer.php';
             success: (res) => {
                 console.log(res)
                 $('.name').val(res.data[0].name)
-                $('.description').val(res.data[0].description)
-                $('.id').val(res.data[0].diganose_id)
+                $('.decription').val(res.data[0].description)
+                $('.id').val(res.data[0].pro_id)
                 $('.save').text("Edit")
                 $(".diagnoseModal").modal("show")
             },
@@ -233,10 +231,9 @@ include '../include/footer.php';
 
 
 
-    
-    $(document).on("click", "a.editButton", function() {
-            var id = $(this).attr('editID')
-            fetchDiagnoseData(id)
+    $(document).on("click", "a.editButton", function () {
+        var id = $(this).attr('editID')
+        fetchDiagnoseData(id)
 
     })
     $(document).on("click", "a.deleteDiagnose", function () {
@@ -250,7 +247,6 @@ include '../include/footer.php';
             url: "../Api/diagnose.api.php",
             success: (res) => {
                 console.log(res)
-                readDiagnose()
             },
             error: (res) => {
                 console.log(res)

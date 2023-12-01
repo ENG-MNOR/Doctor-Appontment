@@ -23,7 +23,7 @@ include '../include/sidebar.php';
                     <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
-                            <li class="breadcrumb-item active"><a href="javascript:void(0)">diagnose</a></li>
+                            <li class="breadcrumb-item active"><a href="javascript:void(0)">Diagnose</a></li>
                         </ol>
                     </div>
                 </div>
@@ -43,14 +43,13 @@ include '../include/sidebar.php';
                                                     <thead>
                                                         <tr>
                                                             <th>#</th>
-                                                            <th>Name</th>
-                                                          
+                                                            <th>Amount</th>
+                                                            <th>Type</th>
                                                             <th>Description</th>
-                                                           
+                                                            <th>Date</th>
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody></tbody>
                                                    
                                                 </table>
                                             </div>
@@ -64,8 +63,59 @@ include '../include/sidebar.php';
             Content body end
         ***********************************-->
 
-      
-      
+        <div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <span class="ml-1">Datatable</span>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
+                    <li class="breadcrumb-item active"><a href="javascript:void(0)">diagnose</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Basic Table</h5>
+                        <button id="addNew" data-toggle="modal" data-target="#exampleModal"
+                            class="btn btn-primary float-right">Add New Transaction</button>
+                    </div>
+                    <div class="card-block table-border-style">
+                        <div class="table-responsive">
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>NAME</th>
+
+                                        <th>Description</th>
+
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--**********************************
+            Content body end
+        ***********************************-->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
     data-bs-whatever="@mdo">Open modal for @mdo</button>
 
@@ -142,7 +192,6 @@ include '../include/footer.php';
                     data: data,
                     success: (res) => {
                         console.log(res)
-                        readDiagnose()
                     },
                     error: (res) => {
                         console.log(res)
@@ -189,20 +238,15 @@ include '../include/footer.php';
                 var tr = "<tr>"
                 var { data } = res;
                 data.forEach(value => {
-                    tr += `<td>${value.diganose_id}</td>`
+                    tr += `<td>${value.pro_id}</td>`
                     tr += `<td>${value.name}</td>`
                     tr += `<td>${value.description}</td>`
-                    tr += `<td><a class='btn btn-success editButton' editID=${value.diganose_id}}>Edit</a>
-                      <a class='btn btn-danger deleteDiagnose' delID=${value.diganose_id}>Delete</a></td>`
+                    tr += `<td><a class='btn btn-success editButton' editID=${value.pro_id}>Edit</a>
+                      <a class='btn btn-danger deleteDiagnose' delID=${value.pro_id}>Delete</a></td>`
                     tr += '</tr>'
-
-                    console.log(value)
                 })
                 $(".table tbody").html(tr)
-                console.log(tr)
-
-
-              
+                console.log(data)
             },
             error: (err) => {
                 console.log(err)
@@ -220,8 +264,8 @@ include '../include/footer.php';
             success: (res) => {
                 console.log(res)
                 $('.name').val(res.data[0].name)
-                $('.description').val(res.data[0].description)
-                $('.id').val(res.data[0].diganose_id)
+                $('.decription').val(res.data[0].description)
+                $('.id').val(res.data[0].pro_id)
                 $('.save').text("Edit")
                 $(".diagnoseModal").modal("show")
             },
@@ -233,10 +277,9 @@ include '../include/footer.php';
 
 
 
-    
-    $(document).on("click", "a.editButton", function() {
-            var id = $(this).attr('editID')
-            fetchDiagnoseData(id)
+    $(document).on("click", "a.editButton", function () {
+        var id = $(this).attr('editID')
+        fetchDiagnoseData(id)
 
     })
     $(document).on("click", "a.deleteDiagnose", function () {
@@ -247,10 +290,9 @@ include '../include/footer.php';
                 "id": id,
                 "action": "deleteDiagnose"
             },
-            url: "../Api/diagnose.api.php",
+            url: "../Api/Diagnose.api.php",
             success: (res) => {
                 console.log(res)
-                readDiagnose()
             },
             error: (res) => {
                 console.log(res)
@@ -259,5 +301,3 @@ include '../include/footer.php';
         })
     })
     })
-
-    </script>
