@@ -230,6 +230,7 @@ include '../include/footer.php';
                 },
                 success: (res) => {
                     console.log(res)
+                    
                     var tr = "<tr>"
                     res.data.forEach(value => {
                         tr += `<td>${value.dr_id}</td>`
