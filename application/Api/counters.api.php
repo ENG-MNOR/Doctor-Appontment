@@ -22,6 +22,7 @@ class Counters extends DatabaseConnection
                 $res = array("error" => "there is an error");
             }
         }
+       
         echo json_encode($res);
     }
     public function unverifiedDoctors($conn)
