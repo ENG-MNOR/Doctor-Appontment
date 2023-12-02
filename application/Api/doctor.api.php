@@ -105,7 +105,7 @@ class Doctors extends DatabaseConnection
         }
        
        }else{
-        $sql="UPDATE `doctors` SET `name`='$name',`gender`='$gender',`mobile`='$mobile',`address`='$address',`email`='$email',`password`='$password',`profision_id`='$profision_id',`hospital_id`='$hospital_id',`verified`='$verified',`description`='$description',`profile_image`='$profile' WHERE dr_id='$id'";
+        $sql="UPDATE `doctors` SET `name`='$name',`gender`='$gender',`mobile`='$mobile',`address`='$address',`email`='$email',`password`='$password',`profision_id`='$profision_id',`hospital_id`='$hospital_id',`description`='$description' WHERE dr_id='$id'";
         if(!$conn){
             $response=array("error"=>"there is an error connection","status"=>false);
         }
@@ -123,6 +123,47 @@ class Doctors extends DatabaseConnection
         
         echo json_encode($response);
         }
+        public function unverifyDoctor($conn)
+        {
+        extract($_POST);
+        $response=array();
+        $sql="UPDATE `doctors` SET `verified`='$unverify' WHERE dr_id='$id'";
+        if(!$conn){
+            $response=array("error"=>"there is an error connection","status"=>false);
+        }
+        else{
+            $result=$conn->query($sql);
+            if($result){
+                $response=array("message"=>"Doctor is unverified know","status"=>true);
+            }
+            else{
+                $response=array("error"=>"there is an error connection","status"=>false);
+            }
+        }
+        echo json_encode($response);
+       }
+       public function verifyDoctor($conn)
+       {
+       extract($_POST);
+       $response=array();
+       $sql="UPDATE `doctors` SET `verified`='$verify' WHERE dr_id='$id'";
+       if(!$conn){
+           $response=array("error"=>"there is an error connection","status"=>false);
+       }
+       else{
+           $result=$conn->query($sql);
+           if($result){
+               $response=array("message"=>"Doctor is verified know","status"=>true);
+           }
+           else{
+               $response=array("error"=>"there is an error connection","status"=>false);
+           }
+       }
+       echo json_encode($response);
+      }
+        
+        
+    
     public function fetchingOne($conn)
         {
             extract($_POST);

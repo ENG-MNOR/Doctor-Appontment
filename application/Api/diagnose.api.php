@@ -88,7 +88,7 @@ class diagnose extends DatabaseConnection
         extract($_POST);
         $response = array();
 
-        $sql = "UPDATE diagnose set `name` = $name, 'decription' = $decription WHERE diganose_id= $id";
+        $sql = "UPDATE diagnose set `name` = '$name', `description` = '$decription' WHERE `diganose_id`= '$id'";
         if(!$conn){
         $response = array("error"=>"There is an error in the connetction", "status"=>false);
         }
@@ -100,8 +100,32 @@ class diagnose extends DatabaseConnection
                 $response = array("error"=>"There an error for updating","status"=>false);
         }
         echo json_encode($response);
-    }                                                                                                                                                           
+    }   
+    
+    public function fetchingOne($conn)
+    {
+        extract($_POST);
+        $res = array();
+        $data = array();
+        $sql = "SELECT *from diagnose where 
+        diganose_id='$id'";
+        if (!$conn)
+            $res = array("error" => "there is an error during connection");
+        else {
+            $result = $conn->query($sql);
+            if ($result) {
+                while ($rows = $result->fetch_assoc()) {
+                    $data[] = $rows;
+                }
+                $res = array("message" => "success", "data" => $data);
+            } else {
+                $res = array("error" => "there is an error during executing");
+            }
+        }
+        echo json_encode($res);
+    }
 }
+
 
 
 
@@ -121,7 +145,7 @@ switch ($_POST['action']) {
             $diagnose->deleteDiagnose(Diagnose::getConnection());
             break;
     case "fetchingOne":
-        $Diagnose->fetchingOne(Diagnose::getConnection());
+        $diagnose->fetchingOne(Diagnose::getConnection());
         break;
      
     default:

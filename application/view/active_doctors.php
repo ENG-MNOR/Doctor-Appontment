@@ -26,12 +26,12 @@ include '../include/sidebar.php';
 
                     <div class="card-block table-border-style p-3">
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-12 proffision_selection">
                                 <label for="">Filter Doctor Profession</label>
                                 <select id="single-select" class="form-control">
-                                    <option value="all">All</option>
+                                    <!-- <option value="all">All</option>
                                     <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
+                                    <option value="WY">Wyoming</option> -->
                                 </select>
                             </div>
                             <div class="col-12 my-2">
@@ -177,7 +177,8 @@ include '../include/footer.php';
     $(document).ready(function() {
         $(".pick").click(() => window.location.href = "./booking.php");
         $(".create").click(() => console.log(formatTime($(".from_time").val())));
-
+        
+    getDoctorProffision();
 
         function formatTime(time) {
             var time = time.split(":");
@@ -190,8 +191,27 @@ include '../include/footer.php';
             convertedTime = modifiedHours + ":" + minutes.toString().padStart(2, '0');
             console.log(hours)
             return convertedTime + getTimePeriod(hours);
-        }
-
+        };
+       function getDoctorProffision(){
+        $.ajax({
+            method:"POST",
+            dataType:"JSON",
+            data:{action:"readProffision",},
+            url:"../Api/proffision.api.php",
+            success:(res)=>{
+                console.log(res);
+                var {data} = res;
+                option=` <option value="all" selected>All</option>`
+                data.forEach(values => {
+                    option+=`<option value="${values.name}">${values.name}</option>`
+                });
+                $(".proffision_selection select").html(option);
+            },
+            error:(err)=>{
+                            console.log(err);
+           }  
+        })
+    };
         function getTimePeriod(time) {
             if (parseInt(time) < 12)
                 return "AM";

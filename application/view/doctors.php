@@ -16,16 +16,11 @@ include '../include/sidebar.php';
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>Hi, welcome back!</h4>
-                    <span class="ml-1">Datatable</span>
+                    <h4>list of doctors</h4>
+                    <span class="ml-1">and operations</span>
                 </div>
             </div>
-            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
-                    <li class="breadcrumb-item active"><a href="javascript:void(0)">Doctor</a></li>
-                </ol>
-            </div>
+
         </div>
         <!-- row -->
 
@@ -46,14 +41,14 @@ include '../include/sidebar.php';
                                         <th>#</th>
                                         <th>name</th>
                                         <th>gender</th>
-                                        <th>mobile</th>
-                                        <th>address</th>
+                                        <!-- <th>mobile</th>
+                                        <th>address</th> -->
                                         <th>email</th>
                                         <th>verified</th>
                                         <th>description</th>
                                         <th>hospital</th>
-                                        <th>password</th>
-                                        <th>image</th>
+                                        <!-- <th>password</th>
+                                        <th>image</th> -->
 
                                         <th>Action</th>
                                     </tr>
@@ -119,8 +114,8 @@ include '../include/sidebar.php';
                         </div>
                         <div class="mb-3 gender">
                             <label for=""> Gender:</label>
-                            <input type="radio" name="gender" value="1"> Male &nbsp;
-                            <input type="radio" name="gender" value="0"> Female &nbsp;
+                            <input type="radio" name="gender" value="1" id="male"> Male &nbsp;
+                            <input type="radio" name="gender" value="0" id="female"> Female &nbsp;
                         </div>
                         <div class="mb-3">
                             <input type="text" class="form-control password" placeholder="@password"
@@ -165,9 +160,27 @@ include '../include/footer.php';
 
 <script>
     $(document).ready(function () {
-        $(".add").click(() => {getHospitalData();getProfessionData();
+        $(".add").click(() => {
+            getHospitalData(); getProfessionData();
+            $(".save").text("save");
+            clearInputData(
+                $(".name"),
+                $(".email"),
+                $(".gender"),
+                $(".password"),
+                $(".mobile"),
+                $(".address"),
+                $(".proffision_id"),
+                $(".hospital_id"),
+                $(".proffision_id"),
+                $(".description"),
+                $(".image"),
+                
+
+
+            );
             $(".doctorModal").modal("show");
-            
+
 
         });
         $(".save").click(() => {
@@ -183,7 +196,7 @@ include '../include/footer.php';
                 data.append("proffision_id", $(".proffision_id").val())
                 data.append("hospital_id", $(".hospital_id").val())
                 data.append("description", $(".description").val())
-                data.append("action","createDoctor")
+                data.append("action", "createDoctor")
                 data.append("profile_image", $(".image")[0].files[0])
                 // var data = {
                 //     name: $(".name").val(),
@@ -204,91 +217,94 @@ include '../include/footer.php';
                     method: "POST",
                     dataType: "JSON",
                     processData: false,
-                    cache:false,
+                    cache: false,
                     contentType: false,
-                    data:data,
-                    url:"../Api/doctor.api.php",
-                    success:  (res)=> {
+                    data: data,
+                    url: "../Api/doctor.api.php",
+                    success: (res) => {
                         console.log(res);
-                         alert("hello")
+                        readAll();
+                        $(".doctorModal").modal('hide');
+                        displayToast("doctor Was Added Successfully 🔥", "success", 2000);
                     },
-                    error:(error)=>{
+                    error: (error) => {
                         console.log(error);
+                        displayToast("Internal Server Error Ocurred 🤷‍♂😢️", "error", 2000);
                     }
                 })
-               
-                
+
+
             }
             else {
-                if($(".image")[0].files.length>0){
-                var data = new FormData();
-                data.append("name", $(".name").val())
-                data.append("email", $(".email").val())
-                data.append("gender", $(".gender").val())
-                data.append("password", $(".password").val())
-                data.append("mobile", $(".mobile").val())
-                data.append("address", $(".address").val())
-                data.append("proffision_id", $(".proffision_id").val())
-                data.append("hospital_id", $(".hospital_id").val())
-                data.append("description", $(".description").val())
-                data.append("id", $(".id").val())
-                data.append("action","updateDoctor")
-                data.append("hasProfile",true)
-                data.append("profile_image", $(".image")[0].files[0])
-                $.ajax({
-                    method: "POST",
-                    dataType: "JSON",
-                    processData: false,
-                    cache: false,
-                    contentType:false,
-                    data: data,
-                    url: "../Api/doctor.api.php",
-                    success: (res) => {
-                        readAll();
-                        $(".doctorModal").modal("hide");
-                        displayToast("Doctor Was updated Successfully 🔥", "success", 2000);
-                        console.log(res);
-                    },
-                    error: (error) => {
-                        displayToast("Internal Server Error Ocurred 🤷‍♂😢️", "error", 2000);
-                        console.log(error);
-                    }
-                })
-                }else{
+                if ($(".image")[0].files.length > 0) {
+                    var data = new FormData();
+                    data.append("name", $(".name").val())
+                    data.append("email", $(".email").val())
+                    data.append("gender", $(".gender").val())
+                    data.append("password", $(".password").val())
+                    data.append("mobile", $(".mobile").val())
+                    data.append("address", $(".address").val())
+                    data.append("proffision_id", $(".proffision_id").val())
+                    data.append("hospital_id", $(".hospital_id").val())
+                    data.append("description", $(".description").val())
+                    data.append("id", $(".id").val())
+                    data.append("action", "updateDoctor")
+                    data.append("hasProfile", true)
+                    data.append("profile_image", $(".image")[0].files[0])
+                    $.ajax({
+                        method: "POST",
+                        dataType: "JSON",
+                        processData: false,
+                        cache: false,
+                        contentType: false,
+                        data: data,
+                        url: "../Api/doctor.api.php",
+                        success: (res) => {
+                            readAll();
+                            $(".doctorModal").modal("hide");
+                            displayToast("Doctor Was updated Successfully 🔥", "success", 2000);
+                            console.log(res);
+                        },
+                        error: (error) => {
+                            displayToast("Internal Server Error Ocurred 🤷‍♂😢️", "error", 2000);
+                            console.log(error);
+                        }
+                    })
+                } else {
                     data = {
-                    name: $(".name").val(),
-                    email: $(".email").val(),
-                    password: $(".password").val(),
-                    gender: $(".password").val(),
-                    mobile: $(".mobile").val(),
-                    address: $(".address").val(),
-                    profision_id: $(".proffision_id").val(),
-                    hospital_id: $(".hospital_id").val(),
-                   
-                    description: $(".description").val(),
-                    id: $(".id").val(),
-                    action: "updateDoctor",
-                    hasProfile: false
-                }
-                $.ajax({
-                    method: "POST",
-                    dataType: "JSON",
-                    data: data,
-                    url: "../Api/doctor.api.php",
-                    success: (res) => {
-                        readAll();
-                        $(".doctorModal").modal("hide");
-                        displayToast("Doctor Was updated Successfully 🔥", "success", 2000);
-                        console.log(res);
-                    },
-                    error: (error) => {
-                        displayToast("Internal Server Error Ocurred 🤷‍♂😢️", "error", 2000);
-                        console.log(error);
+                        name: $(".name").val(),
+                        email: $(".email").val(),
+                        password: $(".password").val(),
+                        gender: $(".password").val(),
+                        mobile: $(".mobile").val(),
+                        address: $(".address").val(),
+                        profision_id: $(".proffision_id").val(),
+                        hospital_id: $(".hospital_id").val(),
+
+                        description: $(".description").val(),
+                        id: $(".id").val(),
+                        action: "updateDoctor",
+                        hasProfile: false
                     }
-                })
+                    $.ajax({
+                        method: "POST",
+                        dataType: "JSON",
+                        data: data,
+                        url: "../Api/doctor.api.php",
+                        success: (res) => {
+                            readAll();
+                            $(".doctorModal").modal("hide");
+                            displayToast("Doctor Was updated Successfully 🔥", "success", 2000);
+                            console.log(res);
+                        },
+                        error: (error) => {
+                            displayToast("Internal Server Error Ocurred 🤷‍♂😢️", "error", 2000);
+                            console.log(error);
+                        }
+                    })
                 }
-               
-                
+
+
             }
 
         });
@@ -301,6 +317,44 @@ include '../include/footer.php';
             id = $(this).attr('editID');
             fetchDoctorData(id);
         })
+        $(document).on('click', "Button.unverify",function () {
+            id=$(this).attr('unverID');
+            unverify="NO";
+            $.ajax({
+                method:"POST",
+                dataType:"JSON",
+                data:{action:"unverifyDoctor",id,unverify},
+                url:"../Api/doctor.api.php",
+                success:(res)=>{
+                    console.log(res);
+                    readAll();
+                    displayToast("Doctor Unverified Successfully 🔥", "success", 2000);
+
+                },
+                error:(err)=>{
+                    console.log(err);
+                }
+            })
+        });
+        $(document).on('click', "Button.verify",function () {
+            id=$(this).attr('verID');
+            verify="YES";
+            
+            $.ajax({
+                method:"POST",
+                dataType:"JSON",
+                data:{action:"verifyDoctor",id,verify},
+                url:"../Api/doctor.api.php",
+                success:(res)=>{
+                    console.log(res);
+                    readAll();
+                    displayToast("Doctor Verified Successfully 🔥", "success", 2000);
+
+                },
+                error:(err)=>{
+                    console.log(err);
+                }
+        });})
 
         $(document).on('click', "a.deleteButton", function () {
             id = $(this).attr('delID');
@@ -357,20 +411,33 @@ include '../include/footer.php';
 
                         tr += `<td>${values.dr_id}</td>`;
                         tr += `<td>${values.name}</td>`;
-                        tr += `<td>${values.gender}</td>`;
-                        tr += `<td>${values.mobile}</td>`;
-                        tr += `<td>${values.address}</td>`;
+                        if(values.gender==1){
+                            tr += `<td>male</td>`;
+                        }else{
+                            tr += `<td>female</td>`;
+                        }
+                        
+                        // tr += `<td>${values.mobile}</td>`;
+                        // tr += `<td>${values.address}</td>`;
                         tr += `<td>${values.email}</td>`;
-                        tr += `<td>${values.verified}</td>`;
+                        // alert(values.verified);
+                        if (values.verified =='NO'){
+                            tr += `<td><Button class="btn btn-danger verify" verID="${values.dr_id}"><i class="fa-solid fa-circle-xmark"></i></Button></td>`;
+                        }
+                        else {
+                            tr += `<td><Button class="btn btn-success unverify" unverID="${values.dr_id}"><i class="fa-solid fa-check"></i></Button></td>`;
+                        };
+
                         tr += `<td>${values.description}</td>`;
                         tr += `<td>${values.hospital_id}</td>`;
-                        tr += `<td>${values.password}</td>`;
-                        tr += `<td>${values.profile_image}</td>`;
-                        tr += `<td><a class="btn btn-success editButton" editID="${values.dr_id}">Edit</a>
-                                <a class="btn btn-danger deleteButton" delID="${values.dr_id}">Delete</a></td>`;
+                        // tr += `<td>${values.password}</td>`;
+                        // tr += `<td>${values.profile_image}</td>`;
+                        tr += `<td><a class="btn btn-success editButton" editID="${values.dr_id}"><i class="fa-solid fa-pen-to-square"></i></a>
+                                <a class="btn btn-danger deleteButton" delID="${values.dr_id}"><i class="fa-solid fa-xmark"></i></a></td>`;
                         tr += "</tr>";
                     });
                     $(".table tbody").html(tr);
+                    $(".table").DataTable();
                 },
                 error: (error) => {
                     console.log(error);
@@ -403,7 +470,7 @@ include '../include/footer.php';
                         option += `<option value="${values.hospital_id}">${values.name}</option>`;
                     });
 
-              
+
                     $(".hospital_selection select").html(option);
                 },
                 error: (error) => {
@@ -428,7 +495,7 @@ include '../include/footer.php';
                         option += `<option value="${values.pro_id}">${values.name}</option>`;
                     });
 
-              
+
                     $(".proffision_selection select").html(option);
                 },
                 error: (error) => {
@@ -448,21 +515,27 @@ include '../include/footer.php';
                 url: "../Api/doctor.api.php",
                 success: (res) => {
                     console.log(res)
-                    $('.name').val(res.data[0].name)
-                    $('.number').val(res.data[0].main_number)
-                    $('.email').val(res.data[0].email)
+                    $('.name').val(res.data[0].name);
+                    $('.number').val(res.data[0].main_number);
+                    $('.email').val(res.data[0].email);
                     $(".mobile").val(res.data[0].mobile);
                     $(".address").val(res.data[0].address);
-                    $('.location').val(res.data[0].location)
+                    $('.location').val(res.data[0].location);
                     $(".password").val(res.data[0].password);
-                    $('.description').val(res.data[0].description)
+                    $('.description').val(res.data[0].description);
+                    // $('.proffision_id').val(res.data[0].)
                     // $(".filename").text(res.data[0].profile_image)
-                    $('.id').val(res.data[0].dr_id)
-                    let gend = $('.gender input');
+                    $('.id').val(res.data[0].dr_id);
+                    // let gend = $('.gender input');
+                    if (res.data[0].gender == 1) {
+                        $('#male').prop('checked', true);
+                    } else {
+                        $('#female').prop('checked', true);
+                    };
                     $('.proffision_selection').val(res.data[0].proffision_id);
-                    res.data[0].gender == 0 ? gend[0].checked = true : gend[1].checked = true;
-                    $('.save').text("Edit")
-                    $(".doctorModal").modal("show")
+                    // res.data[0].gender == 0 ? gend[0].checked = true : gend[1].checked = true;
+                    $('.save').text("Edit");
+                    $(".doctorModal").modal("show");
                 },
                 error: (res) => {
                     console.log(res)
@@ -470,66 +543,72 @@ include '../include/footer.php';
             })
         }
         function displayToast(message, type, timeout) {
-        if (type == "error") {
-            iziToast.error({
-                title: 'Error Encountered! ',
-                message: message,
-                backgroundColor: "#D83A56",
-                titleColor: "white",
-                messageColor: "white",
-                position: "topRight",
-                timeout: timeout
-            });
-        } else if (type == "success") {
-            iziToast.success({
+            if (type == "error") {
+                iziToast.error({
+                    title: 'Error Encountered! ',
+                    message: message,
+                    backgroundColor: "#D83A56",
+                    titleColor: "white",
+                    messageColor: "white",
+                    position: "topRight",
+                    timeout: timeout
+                });
+            } else if (type == "success") {
+                iziToast.success({
 
-                message: message,
-                backgroundColor: "#54B435",
-                titleColor: "white",
-                messageColor: "white",
-                position: "topRight",
-                timeout: timeout
-            });
-        } else if (type == "ask") {
-            iziToast.question({
-                timeout: timeout,
-                close: false,
-                overlay: true,
-                displayMode: 'once',
-                id: 'question',
-                zindex: 999,
-                title: "Condirm!",
-                message: message,
-                position: 'topRight',
-                titleColor: "#86E5FF",
-                messageColor: "white",
-                backgroundColor: "#0081C9",
-                iconColor: "white",
-                buttons: [
-                    ['<button style="background: #DC3535; color: white;"><b>YES</b></button>', function (instance, toast) {
-                        alert("Ok Deleted...");
-                        instance.hide({
-                            transitionOut: 'fadeOut'
-                        }, toast, 'button');
+                    message: message,
+                    backgroundColor: "#54B435",
+                    titleColor: "white",
+                    messageColor: "white",
+                    position: "topRight",
+                    timeout: timeout
+                });
+            } else if (type == "ask") {
+                iziToast.question({
+                    timeout: timeout,
+                    close: false,
+                    overlay: true,
+                    displayMode: 'once',
+                    id: 'question',
+                    zindex: 999,
+                    title: "Condirm!",
+                    message: message,
+                    position: 'topRight',
+                    titleColor: "#86E5FF",
+                    messageColor: "white",
+                    backgroundColor: "#0081C9",
+                    iconColor: "white",
+                    buttons: [
+                        ['<button style="background: #DC3535; color: white;"><b>YES</b></button>', function (instance, toast) {
+                            alert("Ok Deleted...");
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
 
-                    }, true],
-                    ['<button style="background: #ECECEC; color: #2b2b2b;">NO</button>', function (instance, toast) {
-                        alert("Retuned");
-                        instance.hide({
-                            transitionOut: 'fadeOut'
-                        }, toast, 'button');
+                        }, true],
+                        ['<button style="background: #ECECEC; color: #2b2b2b;">NO</button>', function (instance, toast) {
+                            alert("Retuned");
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
 
-                    }],
-                ],
-                onClosing: function (instance, toast, closedBy) {
-                    //  console.info('Closing | closedBy: ' + closedBy);
-                },
-                onClosed: function (instance, toast, closedBy) {
-                    // console.info('Closed | closedBy: ' + closedBy);
-                }
-            });
+                        }],
+                    ],
+                    onClosing: function (instance, toast, closedBy) {
+                        //  console.info('Closing | closedBy: ' + closedBy);
+                    },
+                    onClosed: function (instance, toast, closedBy) {
+                        // console.info('Closed | closedBy: ' + closedBy);
+                    }
+                });
+            }
         }
-    }}
+        function clearInputData(...inputs) {
+        inputs.forEach(input => {
+            input.val("");
+        })
+    }
+    }
 
     )
 

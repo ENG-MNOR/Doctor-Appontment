@@ -16,16 +16,11 @@ include '../include/sidebar.php';
                 <div class="row page-titles mx-0">
                     <div class="col-sm-6 p-md-0">
                         <div class="welcome-text">
-                            <h4>Hi, welcome back!</h4>
-                            <span class="ml-1">Datatable</span>
+                            <h4>Diagnose list</h4>
+                            <span class="ml-1">and their operation</span>
                         </div>
                     </div>
-                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
-                            <li class="breadcrumb-item active"><a href="javascript:void(0)">diagnose</a></li>
-                        </ol>
-                    </div>
+
                 </div>
                 <!-- row -->
 
@@ -34,7 +29,7 @@ include '../include/sidebar.php';
                                     <div class="card">
                                         <div class="card-header">
                                             <h5>Basic Table</h5>
-                                            <button id="addNew" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary float-right" >Add New Transaction</button>
+                                            <button id="addNew" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary float-right add" >Add New Transaction</button>
                                         </div>
                                         <div class="card-block table-border-style">
                                             <div class="table-responsive">
@@ -86,7 +81,7 @@ include '../include/sidebar.php';
                     </div>
                     <div class="mb-3">
                         
-                        <input type="text" class="form-control decription" id="recipient-name">
+                        <input type="text" class="form-control description" id="recipient-name">
                     </div>
                     <div class="mb-3">
                         
@@ -115,23 +110,38 @@ include '../include/footer.php';
 
 
 ?>
-<script src='../js/jquery-3.3.1.min.js'></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
     integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
     crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
     integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
     crossorigin="anonymous"></script>
+
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+<script src="../iziToast-master/dist/js/iziToast.js"></script>
+<script src="../iziToast-master/dist/js/iziToast.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src='../js/jquery-3.3.1.min.js'></script>
 <script>
     $(document).ready(() => {
-        $(".add").click(() => $(".diagnoseModal").modal("show"));
+        
+        
+        $(".add").click(function(){
+            
+            $(".diagnoseModal").modal("show")
+            $(".save").text("save");
+        clearInputData(
+                $(".name"),
+                $(".description")
+            )
+            ;});
+        
 
         $(".save").click(() => {
             if ($(".save").text() == "save") {
                 var data = {
                     name: $(".name").val(),
-                    decription: $(".decription").val(),
+                    decription: $(".description").val(),
                     action: "createDiagnose"
                 }
 
@@ -143,16 +153,20 @@ include '../include/footer.php';
                     success: (res) => {
                         console.log(res)
                         readDiagnose()
+                        $(".diagnoseModal").modal("hide");
+                        displayToast("dignose Was Added Successfully 🔥", "success", 2000);
+                        
                     },
                     error: (res) => {
                         console.log(res)
+                        displayToast("Internal Server Error Ocurred 🤷‍♂😢️", "error", 2000);
                     }
                 })
            
     }else {
         var data = {
             name: $(".name").val(),
-            decription: $(".decription").val(),
+            decription: $(".description").val(),
 
             id: $(".id").val(),
             action: "updateDiagnose",
@@ -167,9 +181,14 @@ include '../include/footer.php';
             data: data,
             success: (res) => {
                 console.log(res)
+                $(".diagnoseModal").modal("hide");
+                            displayToast("diagnose Was updated Successfully 🔥", "success", 2000);
+                            readDiagnose();
             },
             error: (res) => {
                 console.log(res)
+                displayToast("Internal Server Error Ocurred 🤷‍♂😢️", "error", 2000);
+
             }
         })
     }
@@ -226,11 +245,72 @@ include '../include/footer.php';
                 $(".diagnoseModal").modal("show")
             },
             error: (res) => {
-                console.log(res)
+                console.log("there is ",res)
             },
         })
     }
 
+    function displayToast(message, type, timeout) {
+            if (type == "error") {
+                iziToast.error({
+                    title: 'Error Encountered! ',
+                    message: message,
+                    backgroundColor: "#D83A56",
+                    titleColor: "white",
+                    messageColor: "white",
+                    position: "topRight",
+                    timeout: timeout
+                });
+            } else if (type == "success") {
+                iziToast.success({
+
+                    message: message,
+                    backgroundColor: "#54B435",
+                    titleColor: "white",
+                    messageColor: "white",
+                    position: "topRight",
+                    timeout: timeout
+                });
+            } else if (type == "ask") {
+                iziToast.question({
+                    timeout: timeout,
+                    close: false,
+                    overlay: true,
+                    displayMode: 'once',
+                    id: 'question',
+                    zindex: 999,
+                    title: "Condirm!",
+                    message: message,
+                    position: 'topRight',
+                    titleColor: "#86E5FF",
+                    messageColor: "white",
+                    backgroundColor: "#0081C9",
+                    iconColor: "white",
+                    buttons: [
+                        ['<button style="background: #DC3535; color: white;"><b>YES</b></button>', function (instance, toast) {
+                            alert("Ok Deleted...");
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+
+                        }, true],
+                        ['<button style="background: #ECECEC; color: #2b2b2b;">NO</button>', function (instance, toast) {
+                            alert("Retuned");
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+
+                        }],
+                    ],
+                    onClosing: function (instance, toast, closedBy) {
+                        //  console.info('Closing | closedBy: ' + closedBy);
+                    },
+                    onClosed: function (instance, toast, closedBy) {
+                        // console.info('Closed | closedBy: ' + closedBy);
+                    }
+                });
+            }
+        }
 
 
     
@@ -239,25 +319,50 @@ include '../include/footer.php';
             fetchDiagnoseData(id)
 
     })
+   
+    function clearInputData(...inputs) {
+        inputs.forEach(input => {
+            input.val("");
+        })
+    }
     $(document).on("click", "a.deleteDiagnose", function () {
         var id = $(this).attr('delID')
-        $.ajax({
-            method: "POST",
-            data: {
-                "id": id,
-                "action": "deleteDiagnose"
-            },
-            url: "../Api/diagnose.api.php",
-            success: (res) => {
-                console.log(res)
-                readDiagnose()
-            },
-            error: (res) => {
-                console.log(res)
-            }
+        swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this Data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            method: "POST",
+                            data: {
+                                "id": id,
+                                "action": "deleteDiagnose"
+                            },
+                            url: "../Api/diagnose.api.php",
+                            success: (res) => {
+                                swal("Data Has Been removed!", {
+                                    icon: "success",
+                                });
+                                readDiagnose();
+                            },
+                            error: (res) => {
+                                console.log(res)
+                            }
 
-        })
+                        })
+
+                    } else {
+                        // swal("Your imaginary file is safe!");
+                    }
+                });
+        
     })
+    
+
     })
 
     </script>
