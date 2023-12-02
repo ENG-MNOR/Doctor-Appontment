@@ -3,6 +3,28 @@ include_once '../config/conn.db.php';
 $action=$_POST['action'];
 
 class Hospital extends DatabaseConnection{
+    public function fetchingOne($conn)
+    {
+        extract($_POST);
+        $res = array();
+        $data = array();
+        $sql = "SELECT *from hospitals where 
+        hospital_id='$id'";
+        if (!$conn)
+            $res = array("error" => "there is an error");
+        else {
+            $result = $conn->query($sql);
+            if ($result) {
+                while ($rows = $result->fetch_assoc()) {
+                    $data[] = $rows;
+                }
+                $res = array("message" => "success", "data" => $data);
+            } else {
+                $res = array("error" => "there is an error");
+            }
+        }
+        echo json_encode($res);
+    }
 public function readHospital($conn)
   {
     $response=array();
@@ -44,33 +66,11 @@ public function deleteHospital($conn)
      }
      echo json_encode($response);
     }
-    public function fetchingOne($conn){
-        extract($_POST);
-        $res= array();
-        $data = array();
-        $sql = "SELECT *from hospitals where 
-        hospital_id='$id'";
-        if(!$conn)
-          $res=array("error"=> "there is an error");
-        else{
-            $result = $conn->query($sql);
-            if($result){
-                while($rows=$result->fetch_assoc())
-                {
-                    $data[]=$rows;
-                }
-                $res= array("message"=>"success","data"=>$data);
-            }else{
-                $res= array("error"=>"there is an error");
-            }
-        }
-        echo json_encode($res);
-    }
-public function updateHospital($conn)
+public function updateHospital(mysqli $conn)
     {
      extract($_POST);
      $response=array();
-     $sql="UPDATE `hospitals` SET `name`='$name',`main_number`='$main_number',`email`='$email',`location`='$location',`description`='$description' where hospital_id='$id'";
+     $sql="UPDATE `hospitals` SET `name`='$name',`main_number`='$number',`email`='$email',`location`='$location',`description`='$description' where hospital_id='$id'";
      if(!$conn)
      {
        $response=array("error"=>"there is an error connction","status"=>false);
@@ -79,7 +79,7 @@ public function updateHospital($conn)
       {
         $result=$conn->query($sql);
         if($result){
-            $response=array("message"=>"Doctor successfully updated","status"=>true);
+            $response=array("message"=>"hospital successfully updated","status"=>true);
         }
         else{
             $response=array("error"=>"there is an error connection","status"=>false);
@@ -88,7 +88,7 @@ public function updateHospital($conn)
      echo json_encode($response);
     }
 
-public function createHospital($conn)
+public function createHospital(mysqli $conn)
     {
         extract($_POST);
         $response=array();
@@ -96,34 +96,29 @@ public function createHospital($conn)
         if(!$conn){
             $response=array("error"=>"there is an error connection","status"=>false);
         }
-        try {
-            $result = $conn->query($sql);
-            if ($result){
-                $response = array("message" => "hospital was created..", "status" => true);
-                
-            }
-            else
-                $response = array("error" => "There is an error connection ", "status" => false);
-        } catch (Exception $e) {
-            $response = array(
-                "error" => "There is an error occured while executing..",
-                "message" => $e->getMessage(),
-                "status" => false
-            );
+        else{
+           try{
+                $res = $conn->query($sql);
+                if ($res)
+                    $response = array("error" => "", "status" => true, "message" => "created");
+                else
+                    $response = array("error" => "there is an error connection", "status" => false);
+           }catch(Exception $e){
+                $response = array("error" => "there is an error connection", "status" => false);
+           }
+        
         }
-    
 
-    echo  json_encode($response);
-}
+        echo json_encode($response);
     }
 
-
+}
 
 $hospital =new Hospital;
 if($action){
     $hospital->$action(Hospital::getConnection());
 }
-else echo "action is required...";
+
 
 
 ?>

@@ -6,25 +6,25 @@ include_once("../config/conn.db.php");
 class Admin extends DatabaseConnection
 {
 
- 
-    public function fetchingOne($conn){
+
+    public function fetchingOne($conn)
+    {
         extract($_POST);
-        $res= array();
+        $res = array();
         $data = array();
         $sql = "SELECT *from admins where 
         admin_id='$id'";
-        if(!$conn)
-          $res=array("error"=> "there is an error");
-        else{
+        if (!$conn)
+            $res = array("error" => "there is an error");
+        else {
             $result = $conn->query($sql);
-            if($result){
-                while($rows=$result->fetch_assoc())
-                {
-                    $data[]=$rows;
+            if ($result) {
+                while ($rows = $result->fetch_assoc()) {
+                    $data[] = $rows;
                 }
-                $res= array("message"=>"success","data"=>$data);
-            }else{
-                $res= array("error"=>"there is an error");
+                $res = array("message" => "success", "data" => $data);
+            } else {
+                $res = array("error" => "there is an error");
             }
         }
         echo json_encode($res);
@@ -34,7 +34,7 @@ class Admin extends DatabaseConnection
     {
         extract($_POST);
         $response = array();
-        $data=array();
+        $data = array();
 
         $sql = "SELECT *FROM admins";
         if (!$_conn)
@@ -42,15 +42,13 @@ class Admin extends DatabaseConnection
         else {
             try {
                 $result = $_conn->query($sql);
-                if ($result)
-                    {
-                     while($rows= $result->fetch_assoc()){
-                        $data[]=$rows;
-                     }
-
-                    $response = array("error" => "", "status" => true,"data"=>$data);
+                if ($result) {
+                    while ($rows = $result->fetch_assoc()) {
+                        $data[] = $rows;
                     }
-                else
+
+                    $response = array("error" => "", "status" => true, "data" => $data);
+                } else
                     $response = array("error" => "There is an error connection ", "status" => false);
             } catch (Exception $e) {
                 $response = array(
@@ -116,7 +114,7 @@ class Admin extends DatabaseConnection
 
         echo  json_encode($response);
     }
-   
+
     public  function updateAdmin($_conn)
     {
         extract($_POST);
@@ -153,15 +151,18 @@ switch ($_POST['action']) {
     case "readAdmins":
         $admin->readAdmins(Admin::getConnection());
         break;
+
         case "fetchingOne":
             $admin->fetchingOne(Admin::getConnection());
             break;
-    
+
+
     case "updateAdmin":
         $admin->updateAdmin(Admin::getConnection());
         break;
-    
-
+    // case "fetchingOne":
+    //     $admin->fetchingOne(Admin::getConnection());
+    //     break;
     case "deleteAdmin":
         $admin->deleteAdmin(Admin::getConnection());
         break;
