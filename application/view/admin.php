@@ -212,10 +212,6 @@ include '../include/footer.php';
             //     }
             // })
         })
-    
-        
-        
-
 
 
     const readAdmin = () => {
