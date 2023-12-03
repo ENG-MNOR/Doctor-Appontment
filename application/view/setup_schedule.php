@@ -10,14 +10,18 @@ include '../include/sidebar.php';
 <div class="content-body">
     <div class="container-fluid">
         <div class="row page-titles mx-0">
-            <div class="col-sm-6 p-md-0">
+            <!-- <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
 
                 </div>
-            </div>
+            </div> -->
+
 
         </div>
         <!-- row -->
+        <div class="message-handler">
+
+        </div>
         <h6>Create or Setup New Schedule </h6>
         <p class='text-muted'>This Schedule Will Be Available On Public </p>
         <div class="row">
@@ -28,7 +32,7 @@ include '../include/sidebar.php';
                         <div class="row">
                             <div class="col-6">
                                 <label for="">Doctor</label>
-                                <select name="" id="" class="form-control dr_id">
+                                <select name="" id="" class="form-control doctors">
                                     <option value="">Select Doctor</option>
                                 </select>
                             </div>
@@ -55,7 +59,7 @@ include '../include/sidebar.php';
                             </div>
                             <div class="col-12 mt-4">
                                 <button class='btn btn-success create'>Create</button>
-                                <button class='btn btn-primary'>Back</button>
+                                <button class='btn btn-primary back'>Back</button>
                             </div>
                         </div>
                     </div>
@@ -88,8 +92,61 @@ include '../include/footer.php';
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
     $(document).ready(function() {
-        $(".create").click(() => console.log(formatTime($(".from_time").val())));
+        $('.back').click(() => window.location.href = "./schedule.php")
+        $(".create").click(() => {
 
+            var data = {
+                dr_id: $(".doctors").val(),
+                fromTime: formatTime($(".from_time").val()),
+                toTime: formatTime($(".to_time").val()),
+                date: $(".date").val(),
+                range: $(".range").val(),
+                available: "yes",
+                action: "createSchedule"
+
+            }
+            console.log(data);
+            $.ajax({
+                method: "POST",
+                dataType: "JSON",
+                url: "../Api/schedule.api.php",
+                data: data,
+                success: (res) => {
+                        displayToast(res.message,"success",4000)
+                },
+                error: (res) => {
+                    console.log(res)
+                    displayToast("Internal Server Error Ocurred 🤷‍♂😢️", "error", 2000);
+                }
+            })
+
+
+        });
+
+        function loadDoctors() {
+            $.ajax({
+                method: "POST",
+                dataType: "JSON",
+                url: "../Api/schedule.api.php",
+                data: {
+                    action: "loadDoctors",
+                },
+                success: (res) => {
+                    console.log(res)
+
+                    var htmlOptions = "<option value=''>Select Doctor</option>"
+                    res.data.forEach(value => {
+                        htmlOptions += `<option value='${value.dr_id}'>${value.name}</option>`
+                    })
+                    $(".doctors").html(htmlOptions)
+                },
+                error: (res) => {
+                    console.log(res)
+                    // displayToast("Internal Server Error Ocurred 🤷‍♂😢️", "error", 2000);
+                }
+            })
+        }
+        loadDoctors()
 
         function formatTime(time) {
             var time = time.split(":");
@@ -105,9 +162,71 @@ include '../include/footer.php';
         }
 
         function getTimePeriod(time) {
-            if (parseInt(time) <12)
+            if (parseInt(time) < 12)
                 return "AM";
             return "PM";
+        }
+
+        function displayToast(message, type, timeout) {
+            if (type == "error") {
+                iziToast.error({
+                    title: 'Error Encountered! ',
+                    message: message,
+                    backgroundColor: "#D83A56",
+                    titleColor: "white",
+                    messageColor: "white",
+                    position: "topRight",
+                    timeout: timeout
+                });
+            } else if (type == "success") {
+                iziToast.success({
+
+                    message: message,
+                    backgroundColor: "#54B435",
+                    titleColor: "white",
+                    messageColor: "white",
+                    position: "topRight",
+                    timeout: timeout
+                });
+            } else if (type == "ask") {
+                iziToast.question({
+                    timeout: timeout,
+                    close: false,
+                    overlay: true,
+                    displayMode: 'once',
+                    id: 'question',
+                    zindex: 999,
+                    title: "Condirm!",
+                    message: message,
+                    position: 'topRight',
+                    titleColor: "#86E5FF",
+                    messageColor: "white",
+                    backgroundColor: "#0081C9",
+                    iconColor: "white",
+                    buttons: [
+                        ['<button style="background: #DC3535; color: white;"><b>YES</b></button>', function(instance, toast) {
+                            alert("Ok Deleted...");
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+
+                        }, true],
+                        ['<button style="background: #ECECEC; color: #2b2b2b;">NO</button>', function(instance, toast) {
+                            alert("Retuned");
+                            instance.hide({
+                                transitionOut: 'fadeOut'
+                            }, toast, 'button');
+
+                        }],
+                    ],
+                    onClosing: function(instance, toast, closedBy) {
+                        //  console.info('Closing | closedBy: ' + closedBy);
+                    },
+                    onClosed: function(instance, toast, closedBy) {
+                        // console.info('Closed | closedBy: ' + closedBy);
+                    }
+                });
+            }
         }
     })
 </script>
