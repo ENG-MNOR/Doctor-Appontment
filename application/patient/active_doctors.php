@@ -26,118 +26,19 @@ include '../include/sidebar.php';
 
                     <div class="card-block table-border-style p-3">
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-12 proffision_selection">
                                 <label for="">Filter Doctor Profession</label>
-                                <select id="single-select" class="form-control">
-                                    <option value="all">All</option>
+                                <select id="single-select" class="form-control filter">
+                                    <!-- <option value="all">All</option>
                                     <option value="AL">Alabama</option>
-                                    <option value="WY">Wyoming</option>
+                                    <option value="WY">Wyoming</option> -->
                                 </select>
                             </div>
                             <div class="col-12 my-2">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h6>From: Digfeer Hospital</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <img src="../uploads/1838081373.jpg" class='img-fluid' style="border-radius: 20px" alt="">
-                                                        <div class="my-2 ml-2">
-                                                            <label for="" class='text-muted'>
-                                                                <i class="fa-solid fa-circle-check"></i>
-                                                                Verified</label>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <strong>Dr. Name</strong>
-                                                        <label for="">Dr. Abdullahi Saciid</label>
-                                                        <strong>Profession</strong><br>
-                                                        <label for="">Sergeon</label><br>
-                                                        <strong>Card Price $</strong><br>
-                                                        <label for="">$20.0 (once)</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <button class='btn btn-success create w-100'>
-                                                    <i class="fa-regular fa-thumbs-up mr-2"></i>
-                                                    Pickup</button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h6>From: Digfeer Hospital</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <img src="../uploads/1838081373.jpg" class='img-fluid' style="border-radius: 20px" alt="">
-                                                        <div class="my-2 ml-2">
-                                                            <label for="" class='text-muted'>
-                                                                <i class="fa-solid fa-circle-check"></i>
-                                                                Verified</label>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <strong>Dr. Name</strong>
-                                                        <label for="">Dr. Abdullahi Saciid</label>
-                                                        <strong>Profession</strong><br>
-                                                        <label for="">Sergeon</label><br>
-                                                        <strong>Card Price $</strong><br>
-                                                        <label for="">$20.0 (once)</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <button class='btn btn-success  w-100 pick'>
-                                                    <i class="fa-regular fa-thumbs-up mr-2"></i>
-                                                    Pickup</button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h6>From: Digfeer Hospital</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <img src="../uploads/1838081373.jpg" class='img-fluid' style="border-radius: 20px" alt="">
-                                                        <div class="my-2 ml-2">
-                                                            <label for="" class='text-muted'>
-                                                                <i class="fa-solid fa-circle-check"></i>
-                                                                Verified</label>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <strong>Dr. Name</strong>
-                                                        <label for="">Dr. Abdullahi Saciid</label>
-                                                        <strong>Profession</strong><br>
-                                                        <label for="">Sergeon</label><br>
-                                                        <strong>Card Price $</strong><br>
-                                                        <label for="">$20.0 (once)</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <button class='btn btn-success create w-100'>
-                                                    <i class="fa-regular fa-thumbs-up mr-2"></i>
-                                                    Pickup</button>
-
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="row all-doctors">
+                                    
+                                    
+                                 
                                 </div>
                             </div>
                             <!-- <div class="col-12 mt-4">
@@ -175,9 +76,87 @@ include '../include/footer.php';
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
     $(document).ready(function() {
-        $(".pick").click(() => window.location.href = "../view/booking.php");
-        $(".create").click(() => console.log(formatTime($(".from_time").val())));
+        $(".filter").on("change",function(){
+            // alert($(".filter").val());
+            if($(".filter").val()=="all"){
+                $(".all-doctors").html('');
+                getDoctorshospital();
+            }else{
+        $(".all-doctors").html('');
+            $.ajax({
+            method:"POST",
+            dataType:"JSON",
+            data:{action:"filterProfession",pro: $('.filter').val()},
+            url:"../Api/proffision.api.php",
+            success:(res)=>{
+               
+                var {data} = res;
+                console.log(data);
+                if(data.length==0){
+                    $('.all-doctors').html(`
+                    <div class='alert alert-info'>
+                    <strong>No Data Found Based on ${$(".filter").val()}</strong>
+                    </div>
+                    
+                    `);
+                    return;
+                }
+                data.forEach(value=>{
+                    $('.all-doctors').append(`
+                    <div class="col-6">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h6>From: ${value.hosName}</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <img src="../images/${value.profile_image}" class='img-fluid' style="border-radius: 20px" alt="">
+                                                        <div class="my-2 ml-2">
+                                                            <label for="" class='text-muted'>
+                                                                <i class="fa-solid fa-circle-check"></i>
+                                                                Verified</label>
+                                                        </div>
 
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <strong>Dr. Name</strong>
+                                                        <label for="">Dr. ${value.drName}</label>
+                                                        <strong>Profession</strong><br>
+                                                        <label for="">${value.pro_name}</label><br>
+                                                        <strong>Mobile (Emergency Number)</strong><br>
+                                                        <label for="">${value.mobile}</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <button class='btn btn-success pick w-100' id="${value.drID}">
+                                                <i class="fa-regular fa-thumbs-up mr-2"></i>
+                                                    Pickup</button>
+                                            </div>
+                                        </div>
+                                    </div>`)
+                })
+               
+            },
+            error:(err)=>{
+                console.log("error cooyured")
+                            console.log(err);
+           }  
+        })
+            }
+
+        })
+       
+        $(document).on('click','.card',function(){
+            // id=$(this).attr("id");
+            //  window.location.href = "./booking.php?id="+id;
+             alert("Hell")
+        })
+       
+        $(".create").click(() => console.log(formatTime($(".from_time").val())));
+        
+        getDoctorProffision();
 
         function formatTime(time) {
             var time = time.split(":");
@@ -190,8 +169,85 @@ include '../include/footer.php';
             convertedTime = modifiedHours + ":" + minutes.toString().padStart(2, '0');
             console.log(hours)
             return convertedTime + getTimePeriod(hours);
-        }
+        };
+       function getDoctorProffision(){
+        $.ajax({
+            method:"POST",
+            dataType:"JSON",
+            data:{action:"readProffision",},
+            url:"../Api/proffision.api.php",
+            success:(res)=>{
+                console.log(res);
+                var {data} = res;
+                option=` <option value="all" selected>All</option>`
+                data.forEach(values => {
+                    option+=`<option value="${values.name}">${values.name}</option>`
+                });
+                $(".proffision_selection select").html(option);
+            },
+            error:(err)=>{
+                            console.log(err);
+           }  
+        })
+    };
+    function getDoctorshospital(){
+        $.ajax({
+            method:"POST",
+            dataType:"JSON",
+            data:{action:"readDoctorsHospital",},
+            url:"../Api/doctor.api.php",
+            success:(res)=>{
+               
+                var {data} = res;
+                console.log(data);
+                data.forEach(value=>{
+                    $('.all-doctors').append(`
+                    <div class="col-6">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h6>From: ${value.hosName}</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <img src="../images/${value.profile_image}" class='img-fluid' style="border-radius: 20px" alt="">
+                                                        <div class="my-2 ml-2">
+                                                            <label for="" class='text-muted'>
+                                                                <i class="fa-solid fa-circle-check"></i>
+                                                                Verified</label>
+                                                        </div>
 
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <strong>Dr. Name</strong>
+                                                        <label for="">Dr. ${value.drName}</label>
+                                                        <strong>Profession</strong><br>
+                                                        <label for="">${value.pro_name}</label><br>
+                                                        <strong>Mobile (Emergency Number)</strong><br>
+                                                        <label for="">${value.mobile}</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <button class='btn btn-success create w-100'>
+                                                    <i class="fa-regular fa-thumbs-up mr-2"></i>
+                                                    Pickup</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                    `)
+                })
+               
+            },
+            error:(err)=>{
+                            console.log(err);
+           }  
+        })
+    };
+    getDoctorshospital();
+    getDoctorProffision();
         function getTimePeriod(time) {
             if (parseInt(time) < 12)
                 return "AM";

@@ -5,6 +5,33 @@ $action=$_POST['action'];
 
 class Doctors extends DatabaseConnection
     {
+        
+        public function readDoctorsHospital($conn)
+        {
+            $response=array();
+            $data=array();
+            $sql="SELECT hospitals.hospital_id as hos_id, doctors.dr_id as drID, 
+            hospitals.name as hosName, doctors.name as drName, doctors.mobile, doctors.profile_image, 
+            proffision.name as pro_name, proffision.pro_id FROM doctors
+                        INNER JOIN hospitals
+                        ON doctors.hospital_id=hospitals.hospital_id
+                        JOIN proffision
+                        on doctors.profision_id=proffision.pro_id
+                        WHERE doctors.verified='YES'";
+            if(!$conn)
+                $response=array("error"=>"error from database","status"=>false);
+            else{
+                $result=$conn->query($sql);
+                if($result)
+                    {
+                        while($rows=$result->fetch_assoc()){
+                            $data[]=$rows;
+                        }
+                        $response=array("status"=>true,"data"=>$data);
+                    }   
+                }    
+            echo json_encode($response);
+        }
     
     public function readDoctors($conn)
         {

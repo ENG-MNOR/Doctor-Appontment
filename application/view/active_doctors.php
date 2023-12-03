@@ -192,6 +192,7 @@ include '../include/footer.php';
             console.log(hours)
             return convertedTime + getTimePeriod(hours);
         };
+     
        function getDoctorProffision(){
         $.ajax({
             method:"POST",
