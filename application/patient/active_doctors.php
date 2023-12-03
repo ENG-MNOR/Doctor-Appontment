@@ -175,7 +175,7 @@ include '../include/footer.php';
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
     $(document).ready(function() {
-        $(".pick").click(() => window.location.href = "../view/booking.php");
+        $(".pick").click(() => window.location.href = "./booking.php");
         $(".create").click(() => console.log(formatTime($(".from_time").val())));
 
 
