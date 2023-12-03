@@ -107,29 +107,7 @@ include '../include/sidebar.php';
     </div>
 </div>
 
-                        <input type="text" class="form-control email" id="recipient-name">
-                    </div>
-                    <div class="mb-3">
-                        <!-- <label for="message-text" class="col-form-label">Message:</label> -->
-
-                        <input type="text" class="form-control location" id="recipient-name">
-                    </div>
-                    <div class="mb-3">
-                        <!-- <label for="message-text" class="col-form-label">Message:</label> -->
-
-                        <input type="text" class="form-control decription" id="recipient-name">
-                    </div>
-
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary save">save</button>
-            </div>
-        </div>
-    </div>
-</div>
-
+                      
 
 
 

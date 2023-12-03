@@ -85,6 +85,6 @@ include '../include/footer.php';
 
 <script>
     $(document).ready(function() {
-        $(".booking").click(() => window.location.href = "./booking.php");
+        $(".booking").click(() => window.location.href = "./active_doctors.php");
     })
 </script>

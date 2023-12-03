@@ -31,7 +31,7 @@ class Counters extends DatabaseConnection
         $res = array();
         $data=array();
         $sql = "SELECT * FROM `doctors`
-                 WHERE  verified='No' LIMIT 5";
+                 WHERE  `verified`='No' LIMIT 5";
         if (!$conn)
             $res = array("error" => "there is an error");
         else {
