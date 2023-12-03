@@ -32,7 +32,7 @@ include '../include/sidebar.php';
                         <h5>All Schedules</h5>
                         <button id="addNew" data-toggle="modal" class="btn btn-primary float-right add">Setup Schedule</button>
                     </div>
-                    <div class="card-block table-border-style">
+                    <div class="card-block table-border-style p-3">
                         <div class="table-responsive">
 
                             <table class="table">
@@ -47,6 +47,7 @@ include '../include/sidebar.php';
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
+                                <tbody></tbody>
 
                             </table>
                         </div>
@@ -61,7 +62,55 @@ include '../include/sidebar.php';
         ***********************************-->
 
 
+<div class="modal fade editScheduleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="exampleModalLabel">Edit Schedule</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label ">Date</label>
+                        <input type="date" class="form-control date" id="recipient-name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Doctor</label>
+                        <select class="form-control dr_id">
+                            <option value="">Select Doctor</option>
 
+                        </select>
+                        <!-- <input type="text" class="form-control gender" placeholder="One-line Description (option)" id="recipient-name"> -->
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">From Time</label>
+                        <input type="time" class="form-control from_time" placeholder="61xxxxxxxxx" id="recipient-name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">To Time</label>
+                        <input type="time" class="form-control to_time" placeholder="Yaqshid" id="recipient-name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Range</label>
+                        <input type="number" class="form-control range" id="recipient-name">
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <input type="text" hidden class="form-control id" id="recipient-name">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary edit">Edit</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -80,7 +129,194 @@ include '../include/footer.php';
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
-    $(document).ready(function(){
-        $(".add").click(()=> window.location.href="./setup_schedule.php");
+    $(document).ready(function() {
+        $(".add").click(() => window.location.href = "./setup_schedule.php");
+
+        const fetchPatientData = (id, response) => {
+
+            $.ajax({
+                method: "POST",
+                dataType: "JSON",
+                data: {
+                    "action": "fetchScheduleData",
+                    id: id
+                },
+                url: "../Api/schedule.api.php",
+                success: (res) => {
+                    console.log(res)
+                    response(res);
+                },
+                error: (res) => {
+                    console.log(res)
+                },
+            })
+        }
+
+
+        function loadSchedule() {
+            $.ajax({
+                method: "POST",
+                dataType: "JSON",
+                url: "../Api/schedule.api.php",
+                data: {
+                    action: "loadSchedule",
+                },
+                success: (res) => {
+                    console.log(res)
+
+                    var tr = "<tr>"
+                    res.data.forEach(value => {
+                        tr += `<td>${value.sch_id}</td>`
+                        tr += `<td>${value.date}</td>`
+                        tr += `<td>${value.from_time}</td>`
+                        tr += `<td>${value.to_time}</td>`
+                        if (value.available == "yes")
+                            tr += `<td><a class='btn btn-success text-light activeClass' stateID=${value.sch_id}>Active</a></td>`
+                        else
+                            tr += `<td><a class='btn btn-danger text-light deactiveClass' stateID=${value.sch_id}>Deactive</a></td>`
+                        tr += `<td>${value.name}</td>`
+                        tr += `<td>
+                        <a class='btn btn-danger text-light deleteSchedule' delID=${value.sch_id}><i class="fa-solid fa-xmark"></i></a>
+                        <a class='btn btn-success text-light editSchedule' editID=${value.sch_id}><i class="fa-solid fa-pen-to-square"></i></a>
+                        
+                        </td>`
+
+                        tr += '</tr>'
+                    })
+                    $(".table tbody").html(tr)
+                    $('.table').DataTable()
+                },
+                error: (res) => {
+                    console.log(res)
+                    // displayToast("Internal Server Error Ocurred 🤷‍♂😢️", "error", 2000);
+                }
+            })
+        }
+        loadSchedule();
+
+        $(document).on("click", "a.editSchedule", function() {
+            fetchPatientData($(this).attr("editID"), (res) => {
+                $(".dr_id").val(res.data[0].dr_id);
+                $(".range").val(res.data[0].range_number);
+                $(".date").val(res.data[0].date);
+                $('.editScheduleModal').modal("show");
+            })
+
+        })
+
+        $(document).on("click", "a.activeClass", function() {
+            var id = $(this).attr("stateID");
+            var text = $('a.activeClass').text();
+            swal({
+                    title: "Are you sure?",
+                    text: "Do you want to Deactivate This Schedule, Once Deactivated It will Unavailable!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            method: "POST",
+                            dataType: "JSON",
+                            url: "../Api/schedule.api.php",
+                            data: {
+                                sch_id: id,
+                                available: "no",
+                                action: "updateSchedule"
+                            },
+                            success: (res) => {
+
+                                loadSchedule();
+                                // displayToast(res.message, "success", 4000)
+                            },
+                            error: (res) => {
+                                console.log(res)
+                                // displayToast("Internal Server Error Ocurred 🤷‍♂😢️", "error", 2000);
+                            }
+                        })
+
+                    } else {
+                        // swal("Your imaginary file is safe!");
+                    }
+                });
+
+        })
+        $(document).on("click", "a.deleteSchedule", function() {
+            var id = $(this).attr("delID");
+
+            swal({
+                    title: "Are you sure?",
+                    text: "Confirm to delete this data?!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            method: "POST",
+                            dataType: "JSON",
+                            url: "../Api/schedule.api.php",
+                            data: {
+                                sch_id: id,
+
+                                action: "deleteSchedule"
+                            },
+                            success: (res) => {
+
+                                loadSchedule();
+                                // displayToast(res.message, "success", 4000)
+                            },
+                            error: (res) => {
+                                console.log(res)
+                                // displayToast("Internal Server Error Ocurred 🤷‍♂😢️", "error", 2000);
+                            }
+                        })
+
+                    } else {
+                        // swal("Your imaginary file is safe!");
+                    }
+                });
+
+        })
+        $(document).on("click", "a.deactiveClass", function() {
+            var id = $(this).attr("stateID");
+            var text = $('a.deactiveClass').text();
+            swal({
+                    title: "Are you sure?",
+                    text: "Do you want to Activate This Schedule, Once Active It will Public!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            method: "POST",
+                            dataType: "JSON",
+                            url: "../Api/schedule.api.php",
+                            data: {
+                                sch_id: id,
+                                available: "yes",
+                                action: "updateSchedule"
+                            },
+                            success: (res) => {
+                                alert(res.message)
+                                loadSchedule();
+                                // displayToast(res.message, "success", 4000)
+                            },
+                            error: (res) => {
+                                console.log(res)
+                                // displayToast("Internal Server Error Ocurred 🤷‍♂😢️", "error", 2000);
+                            }
+                        })
+
+                    } else {
+                        // swal("Your imaginary file is safe!");
+                    }
+                });
+
+        })
     })
 </script>
