@@ -10,7 +10,7 @@ class Doctors extends DatabaseConnection
         {
             $response=array();
             $data=array();
-            $sql="SELECT hospitals.hospital_id as hos_id, doctors.dr_id as drID, 
+            $sql="SELECT hospitals.hospital_id as hos_id, doctors.dr_id as drID,
             hospitals.name as hosName, doctors.name as drName, doctors.mobile, doctors.profile_image, 
             proffision.name as pro_name, proffision.pro_id FROM doctors
                         INNER JOIN hospitals
@@ -18,6 +18,57 @@ class Doctors extends DatabaseConnection
                         JOIN proffision
                         on doctors.profision_id=proffision.pro_id
                         WHERE doctors.verified='YES'";
+            if(!$conn)
+                $response=array("error"=>"error from database","status"=>false);
+            else{
+                $result=$conn->query($sql);
+                if($result)
+                    {
+                        while($rows=$result->fetch_assoc()){
+                            $data[]=$rows;
+                        }
+                        $response=array("status"=>true,"data"=>$data);
+                    }   
+                }    
+            echo json_encode($response);
+        }
+        public function readSelectedDoctor($conn)
+        {
+            extract($_POST);
+            $response=array();
+            $data=array();
+            $sql="SELECT hospitals.hospital_id as hos_id, doctors.dr_id as drID, doctors.description as drDescription,
+            hospitals.name as hosName, doctors.name as drName, doctors.mobile, doctors.profile_image, 
+            proffision.name as pro_name, proffision.pro_id FROM doctors
+                        INNER JOIN hospitals
+                        ON doctors.hospital_id=hospitals.hospital_id
+                        JOIN proffision
+                        on doctors.profision_id=proffision.pro_id
+                        WHERE doctors.verified='YES' AND doctors.dr_id='$dr_id'";
+            if(!$conn)
+                $response=array("error"=>"error from database","status"=>false);
+            else{
+                $result=$conn->query($sql);
+                if($result)
+                    {
+                        while($rows=$result->fetch_assoc()){
+                            $data[]=$rows;
+                        }
+                        $response=array("status"=>true,"data"=>$data);
+                    }   
+                }    
+            echo json_encode($response);
+        }
+        public function readScheduleSelectedDoctor($conn)
+        {
+            extract($_POST);
+            $response=array();
+            $data=array();
+            $sql="SELECT schedules.sch_id,schedules.date,schedules.from_time,
+schedules.to_time, schedules.available, doctors.name as drName from schedules
+JOIN doctors
+ON schedules.dr_id=doctors.dr_id
+WHERE doctors.verified='YES' AND schedules.available='yes' AND doctors.dr_id='$dr_id'";
             if(!$conn)
                 $response=array("error"=>"error from database","status"=>false);
             else{

@@ -5,6 +5,28 @@ include_once("../config/conn.db.php");
 
 class Schedule extends DatabaseConnection
 {
+    public function getScheduleRange($conn)
+    {
+        extract($_POST);
+        $res = array();
+        $data = array();
+        $sql = "SELECT schedules.range_number as 'range' FROM schedules
+WHERE schedules.date='$date' AND schedules.dr_id='$dr_id' AND schedules.available='yes'";
+        if (!$conn)
+            $res = array("error" => "there is an error");
+        else {
+            $result = $conn->query($sql);
+            if ($result) {
+                $row = $result->fetch_assoc();
+                $res = array("message" => "success", "range" => $row['range']);
+            } else {
+                $res = array("error" => "there is an error");
+            }
+        }
+
+        echo json_encode($res);
+    }
+    
 
     public function loadDoctors($conn)
     {
