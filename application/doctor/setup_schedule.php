@@ -30,13 +30,8 @@ include '../include/sidebar.php';
 
                     <div class="card-block table-border-style p-3">
                         <div class="row">
-                            <div class="col-6">
-                                <label for="">Doctor</label>
-                                <select name="" id="" class="form-control doctors">
-                                    <option value="">Select Doctor</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
+
+                            <div class="col-12">
                                 <label for="">Schedule Date</label>
                                 <input type="date" name="" id="" class='form-control date'>
                             </div>
@@ -134,7 +129,7 @@ include '../include/footer.php';
             }
 
             var data = {
-                dr_id: $(".doctors").val(),
+                dr_id: 4,
                 fromTime: formatTime($(".from_time").val()),
                 toTime: formatTime($(".to_time").val()),
                 date: $(".date").val(),

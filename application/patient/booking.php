@@ -45,7 +45,41 @@ include '../include/sidebar.php';
 
                         </tbody>
                     </table>
+
+                    <div class="my-2 other-description">
+
+                    </div>
                 </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">Doctor Reviews</div>
+            <div class="card-body">
+                <div class="row">
+                    <table class="table-striped satisfactions">
+                        <thead>
+                            <tr>
+
+                                <th scope="col">Satisfied</th>
+                                <th scope="col">unsatisfied</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                    <div class="my-2">
+
+                    </div>
+                </div>
+                <div class="row descriptions">
+
+
+                </div>
+
+
             </div>
         </div>
 
@@ -69,10 +103,10 @@ include '../include/sidebar.php';
                                     <option value="">Select Doctor</option>
                                 </select>
                             </div>
-                            <div class="col-12 mt-4">
+                            <!-- <div class="col-12 mt-4">
                                 <label for="">time</label>
                                 <input type="time" name="" id="" class='form-control time'>
-                            </div>
+                            </div> -->
 
                             <div class="col-12 mt-4">
                                 <label for="">Symptoms</label>
@@ -142,6 +176,74 @@ include '../include/footer.php';
 
         }
 
+        function loadDescriptions(getResponse) {
+            $.ajax({
+                method: "POST",
+                dataType: "JSON",
+                data: {
+                    action: "loadDescriptions",
+                    dr_id: $(".dr").val(),
+
+                },
+                url: "../Api/appointments.api.php",
+                success: (res) => {
+                    getResponse(res);
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            })
+
+        }
+        loadDescriptions(res => {
+            console.log("now response is ",res)
+            if (res.data.length > 0) {
+                res.data.forEach(value => {
+                    if (value.description != "" || value.description != null) {
+                        $('.descriptions').append(`
+
+ <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <p>${value.description}</p>
+                            </div>
+                        </div>
+                    </div>
+`)
+                    }
+
+                })
+            }
+
+        })
+
+        function countReviews(getResponse) {
+            $.ajax({
+                method: "POST",
+                dataType: "JSON",
+                data: {
+                    action: "countReviews",
+                    dr_id: $(".dr").val(),
+                },
+                url: "../Api/appointments.api.php",
+                success: (res) => {
+                    getResponse(res);
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            })
+
+        }
+        countReviews(res => {
+            var tr = "<tr>"
+            tr += `<td class='text-success fw-bold'>${res.satisfied}</td>`
+            tr += `<td class='text-danger fw-bold'>${res.unsatisfied}</td>`
+            tr += "</tr>"
+
+            $('.satisfactions tbody').html(tr)
+        })
+
         function getNumberOfAppointments(getRes) {
             $.ajax({
                 method: "POST",
@@ -185,7 +287,7 @@ include '../include/footer.php';
             var data = {
                 appointment_date: $('.date').val(),
                 diagnose: $('.diagnose').val(),
-                time: formatTime($('.time').val()),
+                // time: formatTime($('.time').val()),
                 description: $(".description").val(),
                 pat_id: 14,
                 dr_id: $('.dr').val(),
@@ -297,10 +399,16 @@ include '../include/footer.php';
                             tr += `<td>${value.available}</td>`
                             option += `<option value="${value.date}">${value.date}</option>`;
                             tr += "</tr>";
-
+                            $('.other-description').html(`
+                        Duration of this appointment will be : <strong>${value.duration}minutes</strong><br>
+                       Price ($) : <strong>$${value.card_price}</strong>
+                        
+                        `)
                         })
+
                         $('.table tbody').html(tr)
                         $('.date').append(option)
+
 
                     } else {
                         $(".create").attr("disabled", true);
@@ -346,7 +454,7 @@ include '../include/footer.php';
                     $(".doctor_details").html(`
                     
                         <div class="col-5">
-                        <img src="../images/${data[0].profile_image}" alt="" class="img-fluid w-100">
+                        <img src="../images/${data[0].profile_image}" alt="" class="img-fluid w-100" style='border-radius: 20px'>
                     </div>
                     <div class="col-7">
                         <strong>Full Name</strong>

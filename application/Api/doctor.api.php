@@ -65,7 +65,7 @@ class Doctors extends DatabaseConnection
             $response=array();
             $data=array();
             $sql="SELECT schedules.sch_id,schedules.date,schedules.from_time,
-schedules.to_time, schedules.available, doctors.name as drName from schedules
+schedules.to_time, schedules.available,schedules.duration,schedules.card_price, doctors.name as drName from schedules
 JOIN doctors
 ON schedules.dr_id=doctors.dr_id
 WHERE doctors.verified='YES' AND schedules.available='yes' AND doctors.dr_id='$dr_id'";

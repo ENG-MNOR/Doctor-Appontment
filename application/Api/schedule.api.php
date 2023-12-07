@@ -74,6 +74,79 @@ WHERE schedules.date='$date' AND schedules.dr_id='$dr_id' AND schedules.availabl
 
         echo json_encode($res);
     }
+    public function loadScheduleForDoctor($conn)
+    {
+        extract($_POST);
+        $res = array();
+        $data = array();
+        $sql = "SELECT * FROM `schedules`
+                INNER JOIN doctors
+                ON schedules.dr_id=doctors.dr_id
+                where schedules.dr_id='$id'
+                ";
+        if (!$conn)
+            $res = array("error" => "there is an error");
+        else {
+            $result = $conn->query($sql);
+            if ($result) {
+                while($rows = $result->fetch_assoc())
+                  $data[]=$rows;
+
+                $res = array("message" => "success", "data" => $data);
+            } else {
+                $res = array("error" => "there is an error");
+            }
+        }
+
+        echo json_encode($res);
+    }
+    public function validateSchedule($conn)
+    {
+        extract($_POST);
+        $res = array();
+        $data = array();
+        $sql = "SELECT * FROM `schedules`
+               
+                where schedules.dr_id='$dr' and date='$date'
+                ";
+        if (!$conn)
+            $res = array("error" => "there is an error");
+        else {
+            $result = $conn->query($sql);
+            if ($result) {
+                while($rows = $result->fetch_assoc())
+                  $data[]=$rows;
+
+                $res = array("message" => "success", "data" => $data);
+            } else {
+                $res = array("error" => "there is an error");
+            }
+        }
+
+        echo json_encode($res);
+    }
+    public function readSchedules($conn)
+    {
+        extract($_POST);
+        $res = array();
+        $data = array();
+        $sql = "SELECT * FROM `schedules` where `available`='yes'";
+        if (!$conn)
+            $res = array("error" => "there is an error");
+        else {
+            $result = $conn->query($sql);
+            if ($result) {
+                while($rows = $result->fetch_assoc())
+                  $data[]=$rows;
+
+                $res = array("message" => "success", "data" => $data);
+            } else {
+                $res = array("error" => "there is an error");
+            }
+        }
+
+        echo json_encode($res);
+    }
     public function fetchScheduleData($conn)
     {
         extract($_POST);
@@ -102,7 +175,7 @@ WHERE schedules.date='$date' AND schedules.dr_id='$dr_id' AND schedules.availabl
         extract($_POST);
         $res = array();
         $data = array();
-        $sql = "INSERT INTO `schedules`(`date`, `from_time`, `to_time`, `range_number`, `available`, `dr_id`) VALUES ('$date','$fromTime','$toTime','$range','$available','$dr_id')";
+        $sql = "INSERT INTO `schedules`(`date`, `from_time`, `to_time`, `range_number`, `available`,`duration`,`card_price`, `dr_id`) VALUES ('$date','$fromTime','$toTime','$range','$available','$duration','$price','$dr_id')";
         if (!$conn)
             $res = array("error" => "there is an error");
         else {
