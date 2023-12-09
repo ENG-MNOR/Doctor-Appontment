@@ -23,36 +23,69 @@ h
 
         </div>
         <!-- row -->
+        <div class="error-handler p-2 my-2">
+
+        </div>
+        <div class="card">
+            <div class="card-header">Filters</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <label for="">Filter By Date</label>
+                        <select name="" id="" class="form-select date">
+                            <option value="">Select</option>
+                            <option value="2023-12-08">2023-12-08</option>
+                            <option value="2023-12-09">2023-12-09</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label for="">Filter By Status</label>
+                        <select name="" id="" class="form-select status">
+                            <option value="">Select</option>
+                            <option value="Pending">Pending</option>
+                            <option value="completed">Completed</option>
+                            <option value="inprogress">inprogress</option>
+                        </select>
+                    </div>
+                    <div class="col-6 mt-2">
+                        <button class="btn btn-dark w-100 submit">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
                         <h5>Lists</h5>
-                        <button id="addNew" data-toggle="modal" data-target="#exampleModal" class="btn btn-dark float-right report">
+                        <button id="addNew" data-toggle="modal" data-target="#exampleModal" class="btn btn-dark float-right print">
                             <i class="fa-solid fa-print"></i>
 
                             Print</button>
                     </div>
                     <div class="card-block table-border-style p-3">
-                        <div class="table-responsive list_appointments">
+                        <div class="report-area">
+                            <img src="http://localhost/Doctor-Appontment/application/images/doctor-logo.png" alt="" class="img-fluid w-100 mb-3">
+                            <div class="table-responsive list_appointments">
 
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Date</th>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Date</th>
 
-                                        <th>Diagnose</th>
-                                        <th>Patient</th>
+                                            <th>Diagnose</th>
+                                            <th>Patient</th>
 
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
+                                            <th>Status</th>
+                                            <!-- <th>Actions</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
 
-                            </table>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -144,30 +177,6 @@ h
     </div>
 </div>
 
-<div class="modal fade err-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-danger" id="exampleModalLongTitle">
-                    <i class="fa-solid fa-triangle-exclamation mr-2 text-danger"></i>
-                    Printing Error
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body p-2">
-                <div class="alert alert-danger">
-                    <strong>You can only print the appointment details after the doctor has confirmed it. Printing is not available for appointments that are still pending confirmation</strong>
-                </div>
-            </div>
-            <div class="modal-footer">
-
-                <button type="button" class="btn btn-primary ok">Ok</button>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="modal fade statusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -194,6 +203,30 @@ h
         </div>
     </div>
 </div>
+<div class="modal fade err-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="exampleModalLongTitle">
+                    <i class="fa-solid fa-triangle-exclamation mr-2 text-danger"></i>
+                    Printing Error
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-2">
+                <div class="alert alert-danger">
+                    <strong>Printing is restricted to completed or in-progress appointments only. Data that is pending confirmation cannot be printed at this stage.</strong>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-primary ok">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php
 include '../include/footer.php';
@@ -212,6 +245,190 @@ include '../include/footer.php';
 
 <script>
     $(document).ready(function() {
-        
+        $('.ok').click(() => $('.err-modal').modal('hide'))
+        $('.submit').click(() => {
+            if ($('.date').val() != "" && $('.status').val() != "") {
+                console.log("r1")
+                submitReportFilter("both", [$(".status").val(), $('.date').val()])
+            } else if ($('.date').val() == "" && $('.status').val() != "") {
+                console.log("r2")
+                submitReportFilter("status", [$(".status").val(), $('.date').val()])
+            } else if ($('.date').val() != "" && $('.status').val() == "") {
+                console.log("r3")
+                submitReportFilter("date", [$(".status").val(), $('.date').val()])
+            } else {
+                $('.error-handler').html(` <div class="alert alert-danger">
+                <strong>Please provide the filter criteria you would like to use in order to fetch the corresponding report data.</strong>
+            </div>`)
+                setTimeout(() => {
+                    $('.error-handler').html('')
+                }, 5000);
+            }
+
+
+        })
+
+
+        function submitReportFilter(filterType, ...filters) {
+            console.log(filters)
+            $.ajax({
+                method: "POST",
+                dataType: "JSON",
+                url: "../Api/report.api.php",
+                data: {
+                    dr: 4,
+                    type: filterType,
+                    status: filters[0][0],
+                    date: filters[0][1],
+                    action: "filterReportData"
+                },
+                success: (res) => {
+                    console.log(res)
+                    var {
+                        data
+                    } = res;
+                    displayData(data)
+                },
+                error: (res) => {
+                    console.log(res)
+                },
+
+            })
+
+
+        }
+        $('.print').click(() => {
+            // $('.report-area').printThis();
+            var table = document.querySelectorAll('.table')
+
+            if (Array.from(table).length == 0) {
+                alert("There is no data available to be printed at the moment")
+                return;
+            }
+
+            // var colIndex = 4;
+            var collection = table[0].children[1].children;
+            var rows = Array.from(collection);
+            var isValidated = true;
+
+            rows.forEach(tr => {
+                var status = tr.innerText.split("\t")[4]
+                if (status.toLowerCase() == "pending") {
+                    isValidated = false;
+                    $('.err-modal').modal("show")
+                    return;
+                }
+
+            })
+
+            if (isValidated)
+                $('.report-area').printThis();
+        })
+
+        const readData = () => {
+            $.ajax({
+                method: "POST",
+                dataType: "JSON",
+                url: "../Api/report.api.php",
+                data: {
+                    dr_id: 4,
+                    action: "readReportData"
+                },
+                success: (res) => {
+                    var tr = "<tr>"
+                    var {
+                        data
+                    } = res;
+                    displayData(data)
+                    console.log("data is ", data)
+                },
+                error: (res) => {
+                    console.log(res)
+                    // displayToast("Internal Server Error Ocurred 🤷‍♂😢️", "error", 2000);
+                }
+            })
+        }
+        readData()
+
+        function displayData(data) {
+            if (data.length == 0) {
+                $('.list_appointments').html(`
+                       <div class="alert alert-danger" role="alert">
+   There are no reports (appointments) available based on the specified filter criteria, or there is no data available for generating reports at the moment..<a href="./apointments.php" class="alert-link">view appointments</a>
+</div>
+                        
+                        `)
+                return;
+            }
+            var tr = "<tr>"
+            var drName = '';
+            var profile = 'http://localhost/Doctor-Appontment/application/images/'
+            $('.table tbody').html('')
+            data.forEach(value => {
+                tr += `<td>${value.appo_id}</td>`
+                tr += `<td>${value.Date}</td>`
+                drName = value.name;
+                profile += value.profile_image;
+                tr += `<td>${value.diagnose}</td>`
+                tr += `<td>${value.patient}</td>`
+                if (value.status.toLowerCase() == "pending")
+                    tr += `<td>
+                        
+                            <a class='text text-danger  confirm' statusID='${value.appo_id}'>${value.status}</a>
+                            </td>`
+                else if (value.status.toLowerCase() == "completed")
+                    tr += `<td >
+                         <a class='text text-success  confirm' statusID='${value.appo_id}'>${value.status}</a>
+                            </td>`
+                else if (value.status.toLowerCase() == "inprogress")
+                    tr += `<td>
+                         <a class='text text-warning confirm' statusID='${value.appo_id}'>${value.status}</a></td>`
+                else
+                    tr += `<td>
+                        
+                            <a class='text text-danger  confirm' statusID='${value.appo_id}'>${value.status}</a>
+                            </td>`
+
+
+
+                tr += '</tr>'
+            })
+            var htmlTable = `
+             <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Date</th>
+
+                                            <th>Diagnose</th>
+                                            <th>Patient</th>
+
+                                            <th>Status</th>
+                                            <!-- <th>Actions</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    ${tr}</tbody>
+
+                                </table>
+            
+            `;
+            var doctor = `
+            <div class='mt-5'>
+            <strong>___________________________________</strong><br>
+            <span>Doctor's Signature</span>
+            
+            </div>
+            Dr.<strong>${drName}</strong><br>
+            
+            </div>
+            
+            `
+
+            $(".list_appointments").html(htmlTable);
+            $(".list_appointments").append(doctor);
+
+        }
+
     })
 </script>
