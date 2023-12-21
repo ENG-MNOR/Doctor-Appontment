@@ -103,12 +103,12 @@
                                 </div>
                             </li> -->
                         <li class="nav-item dropdown header-profile">
-                            <a class="nav-link" href="#" role="button" data-toggle="dropdown">
-                                <i class="mdi mdi-account"></i>
+                            <a class="nav-link profile" href="#" role="button" data-toggle="dropdown">
+                                <i class="mdi mdi-account profile"></i>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right">
+                            <!-- <div class="dropdown-menu dropdown-menu-right">
                                 <a href="../.././app-profile.html" class="dropdown-item">
-                                    <i class="icon-user"></i>
+                                    <i class="icon-us"></i>
                                     <span class="ml-2">Profile </span>
                                 </a>
                                 <a href="../.././email-inbox.html" class="dropdown-item">
@@ -119,7 +119,7 @@
                                     <i class="icon-key"></i>
                                     <span class="ml-2">Logout </span>
                                 </a>
-                            </div>
+                            </div> -->
                         </li>
                     </ul>
                 </div>

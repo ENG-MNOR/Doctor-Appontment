@@ -58,7 +58,8 @@ class Schedule extends DatabaseConnection
         $res = array();
         $data = array();
         $sql = "SELECT * FROM `schedules`
-                where `sch_id`='$id'";
+        INNER JOIN doctors
+        ON schedules.dr_id=doctors.dr_id";
         if (!$conn)
             $res = array("error" => "there is an error");
         else {
@@ -131,6 +132,27 @@ class Schedule extends DatabaseConnection
                
 
                 $res = array("message" => "Schedule State has been updated", "state" => true);
+            } else {
+                $res = array("error" => "there is an error");
+            }
+        }
+
+        echo json_encode($res);
+    }
+    public function updateAllSchedule($conn)
+    {
+        extract($_POST);
+        $res = array();
+        $data = array();
+        $sql = "UPDATE `schedules` SET `date`='$date',`from_time`='$from_time',`to_time`='$to_time',`range_number`='$range',`duration`='$duration',`card_price`='$price' WHERE `sch_id`='$id';";
+        if (!$conn)
+            $res = array("error" => "there is an error");
+        else {
+            $result = $conn->query($sql);
+            if ($result) {
+               
+
+                $res = array("message" => "Schedule  has been updated", "state" => true);
             } else {
                 $res = array("error" => "there is an error");
             }

@@ -145,7 +145,7 @@ class Proffision extends DatabaseConnection
         extract($_POST);
         $response = array();
 
-        $sql = "UPDATE proffision set `name` =' $name', `description` = '$description' WHERE `pro_id` = '$id'";
+        $sql = "UPDATE proffision set `name` =' $name', `description` = '$decription' WHERE `pro_id` = '$id'";
         if (!$conn) {
             $response = array("error" => "There is an error in the connetction", "status" => false);
         } else {

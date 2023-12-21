@@ -1,4 +1,22 @@
-        <!--**********************************
+<?php session_start();
+?>
+
+
+<div class="quixnav">
+            <div class="quixnav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li class="nav-label first text-light">Super Admin </li>
+                    <li><a  href="../view/dashboard.php" aria-expanded="false">
+                    <i class="fa-solid fa-gauge"></i><span class="nav-text">Dashboard</span></a>
+                        <!-- <ul aria-expanded="false">
+                            <li><a href="../.././index.html">Dashboard 1</a></li>
+                            <li><a href="../.././index2.html">Dashboard 2</a></li>
+                        </ul> -->
+                    </li>
+                    </div></div>
+  
+    
+    <!--**********************************
             Sidebar start
         ***********************************-->
         <div class="quixnav">

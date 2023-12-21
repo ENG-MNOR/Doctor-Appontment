@@ -34,7 +34,8 @@ include '../include/sidebar.php';
                 <div class="card">
                     <div class="card-header">
                         <h5>List Of Patients</h5>
-                        <button id="addNew" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary float-right add">Add Patient</button>
+                        <button id="addNew" data-toggle="modal" data-target="#exampleModal"
+                            class="btn btn-primary float-right add">Add Patient</button>
                     </div>
                     <div class="card-block table-border-style p-3">
                         <div class="table-responsive">
@@ -101,11 +102,13 @@ include '../include/sidebar.php';
                     </div>
                     <div class="mb-3 passContainer">
                         <label for="message-text" class="col-form-label">Password</label>
-                        <input type="text" class="form-control password" placeholder="your password" id="recipient-name">
+                        <input type="text" class="form-control password" placeholder="your password"
+                            id="recipient-name">
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">Profile (Optional)</label>
-                        <input type="file" class="form-control profile_image" placeholder="One-line Description (option)" id="recipient-name">
+                        <input type="file" class="form-control profile_image"
+                            placeholder="One-line Description (option)" id="recipient-name">
                     </div>
                     <div class="mb-3">
                         <!-- <label for="message-text" class="col-form-label">Message:</label> -->
@@ -113,7 +116,8 @@ include '../include/sidebar.php';
                         <input type="text" hidden class="form-control id" id="recipient-name">
                     </div>
                     <div class="mb-3">
-                        <img src='../uploads/default.png' class="profile_photo" style="border: 1px solid green;border-radius: 10%; width: 120px; height: 120px" />
+                        <img src='../uploads/default.png' class="profile_photo"
+                            style="border: 1px solid green;border-radius: 10%; width: 120px; height: 120px" />
                     </div>
                 </form>
             </div>
@@ -126,7 +130,8 @@ include '../include/sidebar.php';
 </div>
 
 <!-- view modal -->
-<div class="modal fade viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -138,7 +143,8 @@ include '../include/sidebar.php';
             <div class="modal-body">
                 <div class="row">
                     <div class="col-4">
-                        <img src="../uploads/default.png" class="view_profile_image" style="border-radius: 10%; width: 120px; height: 120px" />
+                        <img src="../uploads/default.png" class="view_profile_image"
+                            style="border-radius: 10%; width: 120px; height: 120px" />
                     </div>
                     <div class="col-8">
                         <div class="row">
@@ -172,8 +178,13 @@ include '../include/sidebar.php';
 include '../include/footer.php';
 ?>
 <script src='../js/jquery-3.3.1.min.js'></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script src="../js/validations.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
 <script src='../js/jquery-3.3.1.min.js'></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
 <script src="../iziToast-master/dist/js/iziToast.js"></script>
@@ -191,8 +202,6 @@ include '../include/footer.php';
                 $(".address"),
                 $(".mobile"),
                 $(".profile_image"),
-
-
             );
             $('.passContainer').attr("hidden", false)
             $(".profile_photo").attr("src", "../uploads/default.png");
@@ -226,7 +235,7 @@ include '../include/footer.php';
         }
 
         // display patient data
-        $(document).on("click", "a.viewPatient", function() {
+        $(document).on("click", "a.viewPatient", function () {
             var id = $(this).attr("viewID")
 
             fetchPatientData(id, (res) => {
@@ -245,7 +254,7 @@ include '../include/footer.php';
 
         });
         // edit 
-        $(document).on("click", "a.editPatient", function() {
+        $(document).on("click", "a.editPatient", function () {
             var id = $(this).attr("editID")
             clearInputData(
                 $(".name"),
@@ -287,46 +296,74 @@ include '../include/footer.php';
         function createPatient(data, hasFile = false) {
             if (!hasFile) {
                 console.log(data.hasProfile)
-                $.ajax({
-                    method: "POST",
-                    dataType: "JSON",
-                    url: "../Api/patient.api.php",
-                    data: data,
-                    success: (res) => {
-                        console.log(res)
-                        $(".patientModal").modal("hide")
-                        readPatient();
-                        $(".table").DataTable();
-                        displayToast("The Data has been added..👋", "success", 2000)
+                if (validateEmail($(".email").val())) {
+                    adminCheck($(".email").val(), "patients", (result) => {
+                        if (result) {
+                            displayToast("patient all ready exist please create new one 🤷‍♂😢️", "error", 2000);
+                        } else {
+                            $.ajax({
+                                method: "POST",
+                                dataType: "JSON",
+                                url: "../Api/patient.api.php",
+                                data: data,
+                                success: (res) => {
+                                    console.log(res)
+                                    $(".patientModal").modal("hide")
+                                    readPatient();
+                                    $(".table").DataTable();
+                                    displayToast("The Data has been added..👋", "success", 2000)
 
-                    },
-                    error: (res) => {
-                        console.log(res)
-                        displayToast("Internal Server error occurred 😢", "error", 2000)
+                                },
+                                error: (res) => {
+                                    console.log(res)
+                                    displayToast("Internal Server error occurred 😢", "error", 2000)
+                                }
+                            })
+                        }
+                    });
+
+                } else {
+                    {
+                        displayToast("please check the format of your email 🤷‍♂😢️", "error", 2000);
                     }
-                })
+                }
+
             } else {
-                $.ajax({
-                    method: "POST",
-                    dataType: "JSON",
-                    processData: false,
-                    cache: false,
-                    contentType: false,
-                    url: "../Api/patient.api.php",
-                    data: data,
-                    success: (res) => {
-                        console.log(res)
-                        $(".patientModal").modal("hide")
-                        readPatient();
-                        $(".table").DataTable();
-                        displayToast("The Data has been added..👋", "success", 2000)
+                if (validateEmail($(".email").val())) {
+                    adminCheck($(".email").val(), "patients", (result) => {
+                        if (result) {
+                            displayToast("patient all ready exist please create new one 🤷‍♂😢️", "error", 2000);
+                        } else {
+                            $.ajax({
+                                method: "POST",
+                                dataType: "JSON",
+                                processData: false,
+                                cache: false,
+                                contentType: false,
+                                url: "../Api/patient.api.php",
+                                data: data,
+                                success: (res) => {
+                                    console.log(res)
+                                    $(".patientModal").modal("hide")
+                                    readPatient();
+                                    $(".table").DataTable();
+                                    displayToast("The Data has been added..👋", "success", 2000)
 
-                    },
-                    error: (res) => {
-                        console.log(res)
-                        displayToast("Internal Server error occurred 😢", "error", 2000)
+                                },
+                                error: (res) => {
+                                    console.log(res)
+                                    displayToast("Internal Server error occurred 😢", "error", 2000)
+                                }
+                            })
+                        }
+                    })
+                } else {
+                    {
+                        displayToast("please check the format of your email 🤷‍♂😢️", "error", 2000);
                     }
-                })
+                }
+
+
             }
 
         }
@@ -334,26 +371,36 @@ include '../include/footer.php';
         function updatePatient(data, hasFile = false) {
             if (!hasFile) {
                 console.log(data.hasProfile)
-                $.ajax({
-                    method: "POST",
-                    dataType: "JSON",
-                    url: "../Api/patient.api.php",
-                    data: data,
-                    success: (res) => {
-                        console.log(res)
-                        $(".patientModal").modal("hide")
-                        readPatient();
-                        $(".table").DataTable();
-                        displayToast("The Data has been added..👋", "success", 2000)
+                if (validateEmail($(".email").val())) {
+                    $.ajax({
+                        method: "POST",
+                        dataType: "JSON",
+                        url: "../Api/patient.api.php",
+                        data: data,
+                        success: (res) => {
+                            console.log(res)
+                            $(".patientModal").modal("hide")
+                            readPatient();
+                            $(".table").DataTable();
+                            displayToast("The Data has been added..👋", "success", 2000)
 
-                    },
-                    error: (res) => {
-                        console.log(res)
-                        displayToast("Internal Server error occurred 😢", "error", 2000)
+                        },
+                        error: (res) => {
+                            console.log(res)
+                            displayToast("Internal Server error occurred 😢", "error", 2000)
+                        }
+                    })
+
+
+                } else {
+                    {
+                        displayToast("please check the format of your email 🤷‍♂😢️", "error", 2000);
                     }
-                })
+                }
+
             } else {
-                $.ajax({
+                if (validateEmail($(".email").val())) {
+                     $.ajax({
                     method: "POST",
                     dataType: "JSON",
                     processData: false,
@@ -374,6 +421,14 @@ include '../include/footer.php';
                         displayToast("Internal Server error occurred 😢", "error", 2000)
                     }
                 })
+                }
+                else {
+                    {
+                        displayToast("please check the format of your email 🤷‍♂😢️", "error", 2000);
+                    }
+                }
+
+               
             }
 
         }
@@ -485,16 +540,16 @@ include '../include/footer.php';
 
         // delete patient
 
-        $(document).on("click", "a.deletePatient", function() {
+        $(document).on("click", "a.deletePatient", function () {
             $id = $(this).attr('delId')
             // start confirmation
             swal({
-                    title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this Data!",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this Data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
                 .then((willDelete) => {
                     if (willDelete) {
                         $.ajax({
@@ -574,14 +629,14 @@ include '../include/footer.php';
                     backgroundColor: "#0081C9",
                     iconColor: "white",
                     buttons: [
-                        ['<button style="background: #DC3535; color: white;"><b>YES</b></button>', function(instance, toast) {
+                        ['<button style="background: #DC3535; color: white;"><b>YES</b></button>', function (instance, toast) {
                             alert("Ok Deleted...");
                             instance.hide({
                                 transitionOut: 'fadeOut'
                             }, toast, 'button');
 
                         }, true],
-                        ['<button style="background: #ECECEC; color: #2b2b2b;">NO</button>', function(instance, toast) {
+                        ['<button style="background: #ECECEC; color: #2b2b2b;">NO</button>', function (instance, toast) {
                             alert("Retuned");
                             instance.hide({
                                 transitionOut: 'fadeOut'
@@ -589,10 +644,10 @@ include '../include/footer.php';
 
                         }],
                     ],
-                    onClosing: function(instance, toast, closedBy) {
+                    onClosing: function (instance, toast, closedBy) {
                         //  console.info('Closing | closedBy: ' + closedBy);
                     },
-                    onClosed: function(instance, toast, closedBy) {
+                    onClosed: function (instance, toast, closedBy) {
                         // console.info('Closed | closedBy: ' + closedBy);
                     }
                 });

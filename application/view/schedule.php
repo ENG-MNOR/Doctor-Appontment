@@ -75,14 +75,16 @@ include '../include/sidebar.php';
                         <label for="recipient-name" class="col-form-label ">Date</label>
                         <input type="date" class="form-control date" id="recipient-name">
                     </div>
-                    <div class="mb-3">
-                        <label for="message-text" class="col-form-label">Doctor</label>
-                        <select class="form-control dr_id">
-                            <option value="">Select Doctor</option>
+                      <div class="mb-3">
+                        <label for="">duration</label>
+                        <input type="number" class="form-control duration" placeholder="00:00:00" id="recipient-name">
 
-                        </select>
-                        <!-- <input type="text" class="form-control gender" placeholder="One-line Description (option)" id="recipient-name"> -->
-                    </div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="">card price</label>
+                        <input type="number" class="form-control price" placeholder="$0" id="recipient-name">
+
+                      </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">From Time</label>
                         <input type="time" class="form-control from_time" placeholder="61xxxxxxxxx" id="recipient-name">
@@ -196,12 +198,43 @@ include '../include/footer.php';
 
         $(document).on("click", "a.editSchedule", function() {
             fetchPatientData($(this).attr("editID"), (res) => {
-                $(".dr_id").val(res.data[0].dr_id);
+                console.log(res);
+                $(".id").val(res.data[0].sch_id);
+                // $(".dr_id").text(res.data[0].name);
                 $(".range").val(res.data[0].range_number);
                 $(".date").val(res.data[0].date);
+                $(".from_time").val(convertTimeTo24Hour(res.data[0].from_time));
+                $(".to_time").val(convertTimeTo24Hour(res.data[0].to_time));
+                $(".duration").val(res.data[0].duration);
+                $(".price").val(res.data[0].card_price);
                 $('.editScheduleModal').modal("show");
             })
 
+        })
+        $(document).on("click", ".edit", function() {
+            data={
+                id:$(".id").val(),
+                range:$(".range").val(),
+                date:$(".date").val(),
+                from_time:$(".from_time").val(),
+                to_time:$(".to_time").val(),
+                duration:$(".duration").val(),
+                price:$(".price").val(),
+                action:"updateAllSchedule"
+            }
+        $.ajax({
+            method: "POST",
+            dataType: "JSON",
+            url: "../Api/schedule.api.php",
+            data:data,
+            success:(res)=>{
+                console.log(res);
+            },
+            error:(error)=>{
+                console.log(error);
+            }
+        })
+     
         })
 
         $(document).on("click", "a.activeClass", function() {
@@ -318,5 +351,32 @@ include '../include/footer.php';
                 });
 
         })
+// Convert the time format from 12-hour to 24-hour
+function convertTimeTo24Hour(time) {
+  if (!time) {
+    // Handle the case where the time is undefined or empty
+    return '';
+  }
+
+  const [timePart, meridiem] = time.split(/(?<=\d)\s*([AP]M)/i);
+  const timeParts = timePart.split(":");
+
+  if (timeParts.length !== 2 || !meridiem) {
+    // Handle invalid time format
+    return '';
+  }
+
+  let [hours, minutes] = timeParts;
+  hours = parseInt(hours);
+
+  if (meridiem.toUpperCase() === "PM" && hours !== 12) {
+    hours += 12;
+  } else if (meridiem.toUpperCase() === "AM" && hours === 12) {
+    hours = 0;
+  }
+
+  hours = hours.toString().padStart(2, "0");
+  return `${hours}:${minutes}`;
+}
     })
 </script>

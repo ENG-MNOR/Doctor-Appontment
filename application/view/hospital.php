@@ -34,7 +34,8 @@ include '../include/sidebar.php';
                 <div class="card">
                     <div class="card-header">
                         <h5>All Hospitals</h5>
-                        <button id="addNew" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary float-right add">Add New Hospital</button>
+                        <button id="addNew" data-toggle="modal" data-target="#exampleModal"
+                            class="btn btn-primary float-right add">Add New Hospital</button>
                     </div>
                     <div class="card-block table-border-style p-3">
                         <div class="table-responsive">
@@ -75,7 +76,8 @@ include '../include/sidebar.php';
                 <form>
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label">Hospital name</label>
-                        <input type="text" class="form-control name" placeholder="example: digfeer hospital" id="recipient-name">
+                        <input type="text" class="form-control name" placeholder="example: digfeer hospital"
+                            id="recipient-name">
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">Hospital Main number:</label>
@@ -83,18 +85,21 @@ include '../include/sidebar.php';
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">Email</label>
-                        <input type="text" class="form-control email" placeholder="hospital@gmail.com" id="recipient-name">
+                        <input type="text" class="form-control email" placeholder="hospital@gmail.com"
+                            id="recipient-name">
 
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">Location/Address</label>
-                        <input type="text" class="form-control location" placeholder="Digfeer Rd, 24" id="recipient-name">
+                        <input type="text" class="form-control location" placeholder="Digfeer Rd, 24"
+                            id="recipient-name">
                         <input type="text" hidden class="form-control id" id="recipient-name">
 
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">Description (Optional)</label>
-                        <textarea type="text" class="form-control description" placeholder="Describe...." id="recipient-name"></textarea>
+                        <textarea type="text" class="form-control description" placeholder="Describe...."
+                            id="recipient-name"></textarea>
 
                     </div>
                 </form>
@@ -107,14 +112,19 @@ include '../include/sidebar.php';
     </div>
 </div>
 
-                      
+
 
 
 
 <?php
 include '../include/footer.php'; ?>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
+<script src="../js/validations.js"></script>
 
 <script src='../js/jquery-3.3.1.min.js'></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
@@ -137,7 +147,23 @@ include '../include/footer.php'; ?>
     })
 
     $(".save").click(() => {
-        if ($(".save").text() == "save") {
+        if($(".email").val()==""){
+                displayToast("all fields are required", "error", 2000);
+                    }
+                    else if($(".name").val()==""){
+                        displayToast("all fields are required", "error", 2000);
+                    }   
+                    else if($(".email").val()==""){
+                        displayToast("all fields are required", "error", 2000);
+                    }     
+                    else if($(".location").val()==""){
+                        displayToast("all fields are required", "error", 2000);
+                    }     else if($(".number").val()==""){
+                        displayToast("all fields are required", "error", 2000);
+                    }                 
+                    else{
+
+                        if ($(".save").text() == "save") {
             var data = {
                 name: $(".name").val(),
                 email: $(".email").val(),
@@ -146,8 +172,12 @@ include '../include/footer.php'; ?>
                 description: $(".description").val(),
                 action: "createHospital"
             }
-
-            $.ajax({
+            if (validateEmail($(".email").val())) {
+                adminCheck($(".email").val(), "hospitals", (result) => {
+                    if (result) {
+                        displayToast("hospital all ready exist please create new one 🤷‍♂😢️", "error", 2000);
+                    } else {
+        $.ajax({
                 method: "POST",
                 dataType: "JSON",
                 url: "../Api/hospital.api.php",
@@ -163,6 +193,15 @@ include '../include/footer.php'; ?>
                     displayToast("Internal Server Error Occurred 😢😢.", "error", 2000)
                 }
             })
+                    }
+                })
+            } else {
+                {
+                    displayToast("please check the format of your email 🤷‍♂😢️", "error", 2000);
+                }
+            }
+
+    
         } else {
 
 
@@ -176,38 +215,45 @@ include '../include/footer.php'; ?>
                 action: "updateHospital",
 
             }
-
+            if (validateEmail($(".email").val())) {
             $.ajax({
-                method: "POST",
-                dataType: "JSON",
-                url: "../Api/hospital.api.php",
-                data: data,
-                success: (res) => {
-                    console.log(res)
-                    $(".adminModal").modal("hide");
-                    readHospitals();
-                    $(".hospitalModal").modal("hide");
-                    displayToast("Hospital Data Was Updated Successfully..", "success", 2000)
-                },
-                error: (res) => {
-                    console.log(res)
-                    displayToast("Internal Server Error Occurred 😢😢.", "error", 2000)
-                }
-            })
+                        method: "POST",
+                        dataType: "JSON",
+                        url: "../Api/hospital.api.php",
+                        data: data,
+                        success: (res) => {
+                            console.log(res)
+                            $(".adminModal").modal("hide");
+                            readHospitals();
+                            $(".hospitalModal").modal("hide");
+                            displayToast("Hospital Data Was Updated Successfully..", "success", 2000)
+                        },
+                        error: (res) => {
+                            console.log(res)
+                            displayToast("Internal Server Error Occurred 😢😢.", "error", 2000)
+                        }
+                    })
+            }
+            else {
+                        {
+                            displayToast("please check the format of your email 🤷‍♂😢️", "error", 2000);
+                        }
+                    }
+      
 
-        }
+        }                    }
 
     })
 
-    $(document).on("click", "a.deleteHospital", function() {
+    $(document).on("click", "a.deleteHospital", function () {
         var id = $(this).attr('delID')
         swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this Data!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this Data!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
             .then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
@@ -236,7 +282,7 @@ include '../include/footer.php'; ?>
         // end
 
     })
-    $(document).on("click", "a.editHospital", function() {
+    $(document).on("click", "a.editHospital", function () {
         var id = $(this).attr('editID')
         fetchHospitalData(id)
     })
@@ -346,14 +392,14 @@ include '../include/footer.php'; ?>
                 backgroundColor: "#0081C9",
                 iconColor: "white",
                 buttons: [
-                    ['<button style="background: #DC3535; color: white;"><b>YES</b></button>', function(instance, toast) {
+                    ['<button style="background: #DC3535; color: white;"><b>YES</b></button>', function (instance, toast) {
                         alert("Ok Deleted...");
                         instance.hide({
                             transitionOut: 'fadeOut'
                         }, toast, 'button');
 
                     }, true],
-                    ['<button style="background: #ECECEC; color: #2b2b2b;">NO</button>', function(instance, toast) {
+                    ['<button style="background: #ECECEC; color: #2b2b2b;">NO</button>', function (instance, toast) {
                         alert("Retuned");
                         instance.hide({
                             transitionOut: 'fadeOut'
@@ -361,10 +407,10 @@ include '../include/footer.php'; ?>
 
                     }],
                 ],
-                onClosing: function(instance, toast, closedBy) {
+                onClosing: function (instance, toast, closedBy) {
                     //  console.info('Closing | closedBy: ' + closedBy);
                 },
-                onClosed: function(instance, toast, closedBy) {
+                onClosed: function (instance, toast, closedBy) {
                     // console.info('Closed | closedBy: ' + closedBy);
                 }
             });

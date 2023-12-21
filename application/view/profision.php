@@ -128,7 +128,11 @@ include '../include/footer.php';
         });
 
         $(".save").click(() => {
-            if ($(".save").text() == "save") {
+            if($(".name").val()==""){
+                displayToast("all fields are required", "error", 2000);
+                    }                  
+                    else{
+                        if ($(".save").text() == "save") {
                 var data = {
                     name: $(".name").val(),
                     decription: $(".decription").val(),
@@ -183,6 +187,9 @@ include '../include/footer.php';
                     }
                 })
             }
+
+
+                    }
         })
 
 

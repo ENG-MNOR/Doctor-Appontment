@@ -1,4 +1,5 @@
 <?php
+// session_start();
 include '../include/links.php';
 include '../include/header.php';
 include '../include/sidebar.php';
@@ -183,6 +184,7 @@ include '../include/sidebar.php';
 <!--**********************************
             Content body end
         ***********************************-->
+
 <?php
 include '../include/footer.php';
 
