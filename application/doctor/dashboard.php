@@ -14,12 +14,12 @@ include '../include/sidebar.php';
                 <div class="card text-light" style="background: #79155B;">
                     <div class="stat-widget-two card-body">
                         <div class="stat-content text-light">
-                            <div class="stat-text text-light">Total Doctors </div>
-                            <div class="stat-digit text-light doctors">
+                            <div class="stat-text text-light">Total Appointments </div>
+                            <div class="stat-digit text-light appointments">
 
                                 8500
                             </div>
-                            <i class="fa-solid fa-user-doctor"></i>
+                            <!-- <i class="fa-solid fa-user-doctor"></i> -->
                         </div>
 
                     </div>
@@ -29,9 +29,9 @@ include '../include/sidebar.php';
                 <div class="card text-light" style="background: #2E4374;">
                     <div class="stat-widget-two card-body">
                         <div class="stat-content">
-                            <div class="stat-text text-light">Total Users</div>
-                            <div class="stat-digit text-light admins"> 7800</div>
-                            <i class="fa-solid fa-user-pen"></i>
+                            <div class="stat-text text-light">Pending Appointments</div>
+                            <div class="stat-digit text-light pending"> 7800</div>
+                            <!-- <i class="fa-solid fa-user-pen"></i> -->
                         </div>
                         <!-- <div class="progress">
                             <div class="progress-bar progress-bar-primary w-75" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
@@ -43,9 +43,9 @@ include '../include/sidebar.php';
                 <div class="card text-light" style="background: #5B0888;">
                     <div class="stat-widget-two card-body">
                         <div class="stat-content">
-                            <div class="stat-text text-light">Patients</div>
-                            <div class="stat-digit text-light patients"> 500</div>
-                            <i class="fa-solid fa-suitcase-medical"></i>
+                            <div class="stat-text text-light">Active Appointments</div>
+                            <div class="stat-digit text-light active"> 500</div>
+                            <!-- <i class="fa-solid fa-suitcase-medical"></i> -->
                         </div>
                         <!-- <div class="progress">
                             <div class="progress-bar progress-bar-warning w-50" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
@@ -57,9 +57,9 @@ include '../include/sidebar.php';
                 <div class="card text-light" style="background: #004225;">
                     <div class="stat-widget-two card-body">
                         <div class="stat-content">
-                            <div class="stat-text text-light">Registered Hospitals</div>
-                            <div class="stat-digit text-light hospitals"> 900</div>
-                            <i class="fa-solid fa-hospital"></i></i>
+                            <div class="stat-text text-light">Completed</div>
+                            <div class="stat-digit text-light completed"> 900</div>
+                            <!-- <i class="fa-solid fa-hospital"></i></i> -->
                         </div>
                         <!-- <div class="progress">
                             <div class="progress-bar progress-bar-danger w-65" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
@@ -72,104 +72,28 @@ include '../include/sidebar.php';
         </div>
 
         <div class="row">
-            <div class="col-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Active Appointments</h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">First</th>
-                                    <th scope="col">Last</th>
-                                    <th scope="col">Handle</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td colspan="2">Larry the Bird</td>
-                                    <td>@twitter</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-            <div class="col-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Unverified Doctors</h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-bordered Unverified">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Image</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
 
 
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
 
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5>Today Schedules</h5>
+                        <h5>Active Appointments</h5>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body body-dash">
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">First</th>
-                                    <th scope="col">Last</th>
-                                    <th scope="col">Handle</th>
+                                   
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Status</th>
+                                   
+
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td colspan="2">Larry the Bird</td>
-                                    <td>@twitter</td>
-                                </tr>
+
+
                             </tbody>
                         </table>
                     </div>
@@ -200,18 +124,21 @@ include '../include/footer.php';
 <script>
     $(document).ready(() => {
 
-        const countRowNumbers = (tableName, label) => {
+        const countRowNumbers = (tableName, label, options) => {
             $.ajax({
                 method: "POST",
                 dataType: "JSON",
                 url: "../Api/counters.api.php",
                 data: {
-                    action: "count",
+                    action: "countDashboardNumbers",
                     table: tableName,
+                    id: 4,
+                    status: options.status,
+                    getStatus: options.getStatus
                 },
                 success: (res) => {
                     console.log(res)
-                    label.html(res.rowNumber);
+                    label.text(res.rowNumber);
                 },
                 error: (res) => {
                     console.log(res)
@@ -219,31 +146,35 @@ include '../include/footer.php';
                 }
             })
         }
-        const getUnverifiedDoctors = () => {
+        const activeAppointments = () => {
             $.ajax({
                 method: "POST",
                 dataType: "JSON",
-                url: "../Api/counters.api.php",
+                url: "../Api/appointments.api.php",
                 data: {
-                    action: "unverifiedDoctors",
+                    action: "activeAppointments",
 
+                    id: 4,
                 },
                 success: (res) => {
-                    console.log(res)
-                    
-                    var tr = "<tr>"
-                    res.data.forEach(value => {
-                        tr += `<td>${value.dr_id}</td>`
-                        tr += `<td>${value.name}</td>`
-                        if (value.profile_image != "no_profile")
-                            tr += `<td><img src='../uploads/${value.profile_image}' style='width: 40px; height: 40px; border-radius: 50%'/></td>`
-                        else
-                            tr += `<td><img src='../uploads/default.png' style='width: 50px; height: 50px; border-radius: 50%'/></td>`
+                    if (res.data.length > 0) {
+                        var tr = '<tr>'
+                        res.data.forEach(value => {
+                            tr+=`<td>${value.Date}</td>`
+                            tr+=`<td>${value.status}</td>`
 
-                        // tr += `<td>${value.profile_image}</td>`
-                        tr += '</tr>'
-                    })
-                    $(".Unverified tbody").html(tr)
+                            tr += '</tr>';
+                        })
+                        $('.table tbody').html(tr)
+                    } else {
+                        $('.body-dash').html(`
+                        <div class='alert alert-info'>
+                        <strong>Currently, there are no active appointments available at the moment</strong>
+                        </div>
+
+                        `)
+                    }
+
                 },
                 error: (res) => {
                     console.log(res)
@@ -251,14 +182,27 @@ include '../include/footer.php';
                 }
             })
         }
+        activeAppointments()
 
 
         // callers
-        countRowNumbers("admins", $(".admins"))
-        countRowNumbers("doctors", $(".doctors"))
-        countRowNumbers("patients", $(".patients"))
-        countRowNumbers("hospitals", $(".hospitals"))
-        getUnverifiedDoctors()
+        countRowNumbers("appointment", $(".appointments"), {
+            getStatus: "no"
+        })
+        countRowNumbers("appointment", $(".pending"), {
+            status: "Pending",
+            getStatus: "yes"
+        })
+        countRowNumbers("appointment", $(".active"), {
+            status: "inprogress",
+            getStatus: "yes"
+        })
+        countRowNumbers("appointment", $(".completed"), {
+            status: "completed",
+            getStatus: "yes"
+        })
+
+
 
 
     })

@@ -66,8 +66,9 @@ include '../include/links.php';
             Content body end
         ***********************************-->
 
-<div class="modal fade adminModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade adminModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"> -->
 
+<<<<<<< HEAD
     <div class="modal fade adminModal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -99,6 +100,36 @@ include '../include/links.php';
                             <label for="show" class="col-form-label">
                                 Show Password
                             </label>
+=======
+<div class="modal fade adminModal"  tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Admin (Only Admin Based)</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Username:</label>
+                        <input type="text" class="form-control username" placeholder="@username" id="recipient-name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Email</label>
+                        <input type="text" class="form-control email" placeholder="user@gmail.com" id="recipient-name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Password</label>
+                        <input type="text" class="form-control password" placeholder="@password" id="recipient-name">
+                        <input type="text" hidden class="form-control id" id="recipient-name">
+                    </div>
+                    <div class="mb-3" style="display: flex; align-items: center;">
+                        <input type='checkbox' class='showPass mr-2' id="show" />
+                        <label for="show" class="col-form-label">
+                            Show Password
+                        </label>
+>>>>>>> 59da07c72108949a309e723a67bfa7df4464e423
 
                         </div>
                     </form>
