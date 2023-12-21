@@ -41,11 +41,11 @@ include '../include/sidebar.php';
                                         <th>#</th>
                                         <th>name</th>
                                         <th>gender</th>
-                                        <!-- <th>mobile</th>
-                                        <th>address</th> -->
+                                        <th>Mobile</th>
+                                        <!-- <th>address</th> -->
                                         <th>email</th>
                                         <th>verified</th>
-                                        <th>description</th>
+                                        <!-- <th>description</th> -->
                                         <th>hospital</th>
                                         <!-- <th>password</th>
                                         <th>image</th> -->
@@ -417,7 +417,7 @@ include '../include/footer.php';
                             tr += `<td>female</td>`;
                         }
                         
-                        // tr += `<td>${values.mobile}</td>`;
+                        tr += `<td>${values.mobile}</td>`;
                         // tr += `<td>${values.address}</td>`;
                         tr += `<td>${values.email}</td>`;
                         // alert(values.verified);
@@ -428,7 +428,7 @@ include '../include/footer.php';
                             tr += `<td><Button class="btn btn-success unverify" unverID="${values.dr_id}"><i class="fa-solid fa-check"></i></Button></td>`;
                         };
 
-                        tr += `<td>${values.description}</td>`;
+                        // tr += `<td>${values.description}</td>`;
                         tr += `<td>${values.hospital_id}</td>`;
                         // tr += `<td>${values.password}</td>`;
                         // tr += `<td>${values.profile_image}</td>`;

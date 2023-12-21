@@ -28,17 +28,16 @@ h
                     </div> -->
         </div>
         <!-- row -->
-        <div class="info-message">
 
-        </div>
         <div class="row">
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
                         <h5>Appointments</h5>
-                        <button id="addNew" data-toggle="modal" data-target="#exampleModal" class="btn btn-dark float-right booking">
-                            <i class="fa-regular fa-calendar-check mr-2 text-light"></i>
-                            Make Booking</button>
+                        <button id="addNew" data-toggle="modal" data-target="#exampleModal" class="btn btn-dark float-right report">
+                            <i class="fa-regular fa-flag"></i>
+
+                            Report</button>
                     </div>
                     <div class="card-block table-border-style p-3">
                         <div class="table-responsive list_appointments">
@@ -48,10 +47,10 @@ h
                                     <tr>
                                         <th>#</th>
                                         <th>Date</th>
-                                        <!-- <th>Time</th> -->
+
                                         <th>Diagnose</th>
-                                        <th>Doctor</th>
-                                        <!-- <th>Patient</th> -->
+                                        <th>Patient</th>
+
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
@@ -149,30 +148,6 @@ h
         </div>
     </div>
 </div>
-<div class="modal fade bd-example-modal-lg reviewModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-
-    <div class="modal-dialog modal-lg">
-
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Review</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="text" hidden class='id-value'>
-                <input type="text" hidden class='appo_id'>
-                <strong class='mb-2'> Please provide your feedback on whether you are satisfied or unsatisfied with the doctor's appointment.</strong>
-                <br> <button class='btn btn-outline-success satisfied'><i class="fa-solid fa-thumbs-up mr-2"></i></button>
-                <button class='btn btn-outline-danger unsatisfied'><i class="fa-solid fa-thumbs-down"></i></button>
-
-            </div>
-            <div class="modal-footer">
-
-
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade err-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -198,6 +173,32 @@ h
         </div>
     </div>
 </div>
+<div class="modal fade statusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-muted" id="exampleModalLongTitle">
+                    Confirmation Status
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-2">
+                <div class="my-2">
+                    <strong class='text-muted'>The confirmation should be based on the status of the appointment, which can be either "In progress" or "Completed."</strong>
+                </div>
+
+            </div>
+            <input type="text" hidden class='id-value'>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success completed">Completed</button>
+                <button type="button" class="btn btn-warning inprogress">In Progress</button>
+                <button type="button" class="btn btn-secondary default">Default</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php
 include '../include/footer.php';
@@ -216,77 +217,33 @@ include '../include/footer.php';
 
 <script>
     $(document).ready(function() {
-        // $(document).on("click", 'a.completedReview', function() {
-        //     $('.reviewModal').modal("show")
-
-        // })
-
-        $(document).on("click", "a.completedReview", function() {
-            var id = $(this).attr("rev");
-            fetchAppointment(id, res => {
-                $('.id-value').val(res.data[0].dr_id)
-                $('.appo_id').val(id)
-                $(".reviewModal").modal("show")
-            })
-
+        $(document).on("click", "a.confirm", function() {
+            var id = $(this).attr("statusID");
+            $('.id-value').val(id)
+            $(".statusModal").modal("show")
 
         })
-        $('.satisfied').click(() => {
-            validateReview(res => {
-                if (res.data.length > 0) {
-                    swal("Oops!", "Since you have already provided a review for the appointment, it is not possible to submit a second review for the same appointment. Thank you for your feedback.", "error");
-                    return;
-                }
-
-                makeReview("satisfied")
-                swal(
-                    "Thank you for feedback!", "", "success", {});
-            })
-
-        })
-        $('.unsatisfied').click(() => {
-            validateReview(res => {
-                if (res.data.length > 0) {
-                    swal(
-                        "Oops!", "Since you have already provided a review for the appointment, it is not possible to submit a second review for the same appointment. Thank you for your feedback.",
-                        "error", {
-
-                        });
-                    return;
-                }
-                $('.reviewModal').modal("hide")
-                swal("Could you please provide a brief description of the reasons for your dissatisfaction?", {
-                        content: "input",
-                    })
-                    .then((value) => {
-                        makeReview("unsatisfied", value)
-                        swal(
-                            "Thank you for feedback!", "", "success", {
-
-                            });
-                    });
-
-            })
-
-        })
+        $('.completed').click(() => updateAppointmentStatus("completed"))
+        $('.inprogress').click(() => updateAppointmentStatus("inprogress"))
+        $('.default').click(() => updateAppointmentStatus("Pending"))
 
 
 
-
-        function makeReview(review, description = '') {
+        function updateAppointmentStatus(status) {
             $.ajax({
                 method: "POST",
                 dataType: "JSON",
                 data: {
-                    action: "makeReview",
-                    review: review,
-                    description: description,
-                    id: $('.id-value').val(),
-                    appo_id: $('.appo_id').val(),
+                    action: "updateAppointmentStatus",
+                    status: status,
+                    id: $('.id-value').val()
                 },
                 url: "../Api/appointments.api.php",
                 success: (res) => {
-                    $('.reviewModal').modal("hide")
+
+                    console.log(res)
+                    loadAppointments()
+                    $('.statusModal').modal("hide")
                     // alert(res.message)
                 },
                 error: (res) => {
@@ -294,46 +251,6 @@ include '../include/footer.php';
                 }
             })
         }
-
-        function validateReview(response) {
-            $.ajax({
-                method: "POST",
-                dataType: "JSON",
-                data: {
-                    action: "validateReview",
-                    appo_id: $('.appo_id').val()
-
-                },
-                url: "../Api/appointments.api.php",
-                success: (res) => {
-
-                    response(res)
-                },
-                error: (res) => {
-                    console.log(res)
-                }
-            })
-        }
-
-        function fetchAppointment(id, response) {
-            $.ajax({
-                method: "POST",
-                dataType: "JSON",
-                data: {
-                    action: "fetchAppointment",
-                    id: id
-                },
-                url: "../Api/appointments.api.php",
-                success: (res) => {
-
-                    response(res)
-                },
-                error: (res) => {
-                    console.log(res)
-                }
-            })
-        }
-
 
         $('.edit').click(() => {
             if ($('.doctors').val() == "" || $('.date').val() == "" || $('.diagnose').val() == "" ||
@@ -603,31 +520,10 @@ include '../include/footer.php';
                 }
             })
         };
-
-        function getCardPriceAndTiming(date,id, response) {
-           
-            $.ajax({
-                method: "POST",
-                dataType: "JSON",
-                data: {
-                    action: "getCardPriceAndTiming",
-                    dr: id,
-                    date: date
-
-                },
-                url: "../Api/appointments.api.php",
-                success: (res) => {
-                    response(res)
-                },
-                error: (err) => {
-                    console.log(err);
-                }
-            })
-        };
         getDoctorProffision()
 
 
-        $(".booking").click(() => window.location.href = "./active_doctors.php");
+        $(".report").click(() => window.location.href = "./report.php");
         $(".ok").click(() => $('.err-modal').modal("hide"));
         $(".print").click(() => {
             if ($(".state").text().toLocaleLowerCase() == "pending") {
@@ -643,10 +539,7 @@ include '../include/footer.php';
         $(document).on("click", "a.viewAppo", function() {
             var id = $(this).attr("viewID");
             readPrintableData(id, (res) => {
-                
-                getCardPriceAndTiming(res.data[0].appo_date,res.data[0].drID,response => {
-                    
-                    $('.body-content').html(`
+                $('.body-content').html(`
                 
                  <img src="http://localhost/Doctor-Appontment/application/images/doctor-logo.png" alt="" class="image-fluid w-100">
                 <br>
@@ -692,8 +585,7 @@ include '../include/footer.php';
                     </tbody>
                 </table>
                 <div class="my-1">
-                    <strong>Card Price : </strong><span>$${response.data[0].card_price}</span><br>
-                    <strong>Duration in minutes : </strong><span>${response.data[0].duration}m</span>
+                    <strong>Card Price : </strong><span>$10</span>
                 </div>
                 <div class="my-1">
                     <strong>Confirmation Status: </strong><span class='state'>${res.data[0].status}</span>
@@ -710,16 +602,12 @@ include '../include/footer.php';
                 </div>
                 <div class="my-2">
                     <div class="alert alert-warning">
-                        <strong>Note: Please ensure that you arrive at the hospital or doctor's office on time as the card price and timing are fixed.</strong>
+                        <strong>Note: Please utilize this form/sheet to ensure that the correct patient is present for their scheduled appointment..</strong>
                     </div>
                 </div>
                 
                 `)
-                    $('.viewModal').modal("show")
-                })
-
-
-
+                $('.viewModal').modal("show")
 
             })
 
@@ -771,7 +659,7 @@ include '../include/footer.php';
         $(document).on("click", "a.deleteAppointment", function() {
             var id = $(this).attr("delID");
             swal({
-                    title: "Undo Appointment",
+                    title: "Remove This Appointment",
                     text: "Once deleted, you will not be able to recover this data!",
                     icon: "warning",
                     buttons: true,
@@ -833,7 +721,7 @@ include '../include/footer.php';
                 method: "POST",
                 dataType: "JSON",
                 data: {
-                    "action": "loadAppointments"
+                    "action": "loadAppointmentsForDoctor"
                 },
                 url: "../Api/appointments.api.php",
                 success: (res) => {
@@ -855,19 +743,25 @@ include '../include/footer.php';
                         tr += `<td>${value.appo_date}</td>`
                         // tr += `<td>${value.time}</td>`
                         tr += `<td>${value.diagnose}</td>`
-                        tr += `<td>${value.doctor}</td>`
+                        tr += `<td>${value.patient}</td>`
                         if (value.status.toLowerCase() == "pending")
-                            tr += `<td class='text-danger'>${value.status}</td>`
-                        else if (value.status.toLowerCase() == "completed") {
                             tr += `<td>
-                            <a href="#" class='text-success fw-bold completedReview' rev=${value.appo_id}>${value.status}</a>
+                        
+                            <a class='btn btn-danger text-light confirm' statusID='${value.appo_id}'>${value.status}</a>
                             </td>`
-
-                        } else if (value.status.toLowerCase() == "inprogress")
-                            tr += `<td class='text-info'>${value.status}</td>`
+                        else if (value.status.toLowerCase() == "completed")
+                            tr += `<td >
+                         <a class='btn btn-success text-light confirm' statusID='${value.appo_id}'>${value.status}</a>
+                            </td>`
+                        else if (value.status.toLowerCase() == "inprogress")
+                            tr += `<td>
+                         <a class='btn btn-warning confirm' statusID='${value.appo_id}'>${value.status}</a></td>`
                         else
-                            tr += `<td class='text-danger'>${value.status}</td>`
-                        tr += `<td><a class='btn btn-success text-light editAppointment' editID=${value.appo_id}>Edit</a>
+                            tr += `<td>
+                        
+                            <a class='btn btn-danger text-light confirm' statusID='${value.appo_id}'>${value.status}</a>
+                            </td>`
+                        tr += `<td>
                      <a class='btn btn-danger text-light deleteAppointment' delID=${value.appo_id}><i class="fa-solid fa-rotate-left"></i></a>
                      <a class="btn btn-primary viewAppo text-light" viewID=${value.appo_id}><i class="fa-solid fa-eye"></i></a>
                      </td>`

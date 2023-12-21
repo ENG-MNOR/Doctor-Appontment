@@ -66,9 +66,9 @@ include '../include/links.php';
             Content body end
         ***********************************-->
 
-<div class="modal fade adminModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade adminModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"> -->
 
-<div class="modal fade adminModal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+<div class="modal fade adminModal"  tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
